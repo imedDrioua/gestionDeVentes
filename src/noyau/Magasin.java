@@ -1,6 +1,8 @@
 package noyau;
 
 public class Magasin {
+
+    private Utilisateur utilisateur;
     private Stock stock;
     private Carnet carnet_des_ventes;
     private Carnet carnet_des_achats;
@@ -12,4 +14,5 @@ public class Magasin {
         this.carnet_des_achats = carnet_des_achats;
         this.carnet_de_credit = carnet_de_credit;
     }
+
 }

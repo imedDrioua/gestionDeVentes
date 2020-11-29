@@ -9,10 +9,21 @@ public class Vente extends Transaction {
     protected double prix_totale=0;
 
 
-    public Vente(TypeDeTransaction type, Date date, Personne client, ArrayList<Piece> piece_vendu, double prix_totale) {
-        super(type, date);
+    public Vente( Date date, Personne client, ArrayList<Piece> piece_vendu) {
+        super(date);
+        this.type = TypeDeTransaction.VENTE;
         this.client = client;
         this.piece_vendu = piece_vendu;
-        this.prix_totale = prix_totale;
+        calculerPrixTotale();
+
+    }
+
+    public void ajouterPieceVendu(Piece piece){
+        this.piece_vendu.add(piece);
+    }
+    protected void calculerPrixTotale(){
+        for(Piece piece : this.piece_vendu){
+            this.prix_totale =+ piece.getPrix_de_vente();
+        }
     }
 }
