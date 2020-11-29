@@ -10,60 +10,176 @@
     <collation id="3" parent="1" name="BINARY"/>
     <collation id="4" parent="1" name="NOCASE"/>
     <collation id="5" parent="1" name="RTRIM"/>
-    <table id="6" parent="2" name="sqlite_master">
+    <table id="6" parent="2" name="admin"/>
+    <table id="7" parent="2" name="personnes"/>
+    <table id="8" parent="2" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="7" parent="2" name="stock"/>
-    <column id="8" parent="6" name="type">
+    <table id="9" parent="2" name="stock"/>
+    <table id="10" parent="2" name="transaction"/>
+    <column id="11" parent="6" name="nom">
+      <Position>1</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="12" parent="6" name="mtp">
+      <Position>2</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="13" parent="6" name="telephone">
+      <Position>3</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="14" parent="6" name="adress">
+      <Position>4</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="15" parent="7" name="ID">
+      <Position>1</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="16" parent="7" name="nom">
+      <Position>2</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="17" parent="7" name="prenom">
+      <Position>3</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="18" parent="7" name="telephone">
+      <Position>4</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="19" parent="7" name="adress">
+      <Position>5</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="20" parent="7" name="type">
+      <Position>6</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="21" parent="7" name="sqlite_autoindex_personnes_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="22" parent="7">
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_personnes_1</UnderlyingIndexName>
+    </key>
+    <key id="23" parent="7">
+      <ColNames>ID</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_personnes_1</UnderlyingIndexName>
+    </key>
+    <column id="24" parent="8" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="9" parent="6" name="name">
+    <column id="25" parent="8" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="10" parent="6" name="tbl_name">
+    <column id="26" parent="8" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="11" parent="6" name="rootpage">
+    <column id="27" parent="8" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="12" parent="6" name="sql">
+    <column id="28" parent="8" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="13" parent="7" name="reference">
+    <column id="29" parent="9" name="reference">
       <Position>1</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="14" parent="7" name="designiation">
+    <column id="30" parent="9" name="designiation">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="15" parent="7" name="prixVente">
+    <column id="31" parent="9" name="prixVente">
       <Position>3</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="16" parent="7" name="prixAchat">
+    <column id="32" parent="9" name="prixAchat">
       <Position>4</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <column id="17" parent="7" name="stockDisponible">
+    <column id="33" parent="9" name="stockDisponible">
       <Position>5</Position>
       <DataType>TEXT|0s</DataType>
     </column>
-    <index id="18" parent="7" name="sqlite_autoindex_stock_1">
+    <index id="34" parent="9" name="sqlite_autoindex_stock_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>reference</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="19" parent="7">
+    <key id="35" parent="9">
       <ColNames>reference</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_stock_1</UnderlyingIndexName>
     </key>
+    <key id="36" parent="9">
+      <ColNames>reference</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_stock_1</UnderlyingIndexName>
+    </key>
+    <column id="37" parent="10" name="id">
+      <Position>1</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="38" parent="10" name="date">
+      <Position>2</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="39" parent="10" name="personne">
+      <Position>3</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="40" parent="10" name="piecesVendu">
+      <Position>4</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="41" parent="10" name="prixTotale">
+      <Position>5</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="42" parent="10" name="prixRomb">
+      <Position>6</Position>
+      <DataType>TEXT|0s</DataType>
+    </column>
+    <column id="43" parent="10" name="type">
+      <Position>7</Position>
+      <DataType>TEXT|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="44" parent="10" name="sqlite_autoindex_transaction_1">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <ColumnCollations></ColumnCollations>
+      <Unique>1</Unique>
+    </index>
+    <key id="45" parent="10">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_transaction_1</UnderlyingIndexName>
+    </key>
+    <key id="46" parent="10">
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_transaction_1</UnderlyingIndexName>
+    </key>
+    <foreign-key id="47" parent="10">
+      <ColNames>personne</ColNames>
+      <RefTableName>personnes</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
   </database-model>
 </dataSource>

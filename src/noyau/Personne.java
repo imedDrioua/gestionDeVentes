@@ -1,12 +1,14 @@
 package noyau;
 
 public class Personne {
+    protected String id="";
     protected String nom="";
     protected String prenom="";
     protected String adresse="";
     protected String teephone="";
 
-    public Personne(String nom, String prenom, String adresse, String teephone) {
+    public Personne(String nom, String prenom, String adresse, String teephone,String id) {
+        this.id=id;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;

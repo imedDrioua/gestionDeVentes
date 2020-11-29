@@ -8,7 +8,7 @@ public class BddConnection
 {
 
 
-    private static final String SCONN = "jdbc:sqlite:magasin.sqlite";
+    private static final String SCONN = "jdbc:sqlite:magasin";
 
     public static Connection getConnection()
             throws SQLException
