@@ -1,0 +1,13 @@
+.tab-header-background{
+    -fx-background-color: white;
+}
+.jfx-tab-pane .tab-selected-line{
+    -fx-border-color: #d22fea;
+}
+.root {
+    -tab-text-color: -fx-text-base-color ;
+}
+
+.tab-label {
+    -fx-text-fill: -tab-text-color ;
+}

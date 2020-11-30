@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.magasin.MagasinController">
+   <children>
+      <AnchorPane layoutX="1030.0" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: #7400FF;" />
+      <JFXTabPane layoutY="50.0" prefHeight="150.0" prefWidth="1300.0" style="-fx-background-color: #7400FF;" stylesheets="@magasinTabPane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.topAnchor="53.0">
+         <tabs>
+            <Tab text="Accueil">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;">
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="414.0" layoutY="58.0" size="4em" text="" />
+                        <ImageView fitHeight="113.0" fitWidth="372.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/pieceAutou.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="389.0" layoutY="72.0" text="Mon Compte" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="548.0" layoutY="58.0" size="4em" />
+                        <Label layoutX="496.0" layoutY="72.0" text="Nouveau Utilisateur" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="1233.0" layoutY="58.0" size="4em" />
+                        <Label layoutX="1225.0" layoutY="72.0" text="About" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <FontAwesomeIcon fill="WHITE" iconName="INFO" layoutX="681.0" layoutY="58.0" size="4em" />
+                        <Label layoutX="647.0" layoutY="72.0" text="Information" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Stock">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;" />
+              </content>
+            </Tab>
+            <Tab text="Achats">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;" />
+              </content>
+            </Tab>
+            <Tab text="Ventes">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;" />
+              </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+      <JFXTabPane layoutY="203.0" prefHeight="476.0" prefWidth="1300.0" stylesheets="@workSpace.css" tabClosingPolicy="ALL_TABS">
+         <tabs>
+            <Tab closable="false" text="Magasin">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="1300.0">
+                     <children>
+                        <FlowPane layoutX="3.0" prefHeight="425.0" prefWidth="1300.0" prefWrapLength="100.0">
+                           <children>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: wheat; -fx-background-radius: 15;">
+                                 <FlowPane.margin>
+                                    <Insets bottom="15.0" right="15.0" />
+                                 </FlowPane.margin>
+                                 <children>
+                                    <HBox prefHeight="200.0" prefWidth="400.0">
+                                       <children>
+                                          <ImageView fitHeight="184.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/stock.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <VBox prefHeight="200.0" prefWidth="228.0">
+                                             <children>
+                                                <Label prefHeight="74.0" prefWidth="222.0" text="Stock">
+                                                   <font>
+                                                      <Font name="System Bold" size="45.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox prefHeight="123.0" prefWidth="200.0">
+                                                   <children>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label prefHeight="30.0" prefWidth="79.0" text="Piéces">
+                                                               <font>
+                                                                  <Font size="20.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label prefHeight="29.0" prefWidth="74.0" text="Facture">
+                                                               <font>
+                                                                  <Font size="19.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label prefHeight="30.0" prefWidth="72.0" text="Bénifice">
+                                                               <font>
+                                                                  <Font size="20.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="123.0" prefWidth="148.0">
+                                                         <children>
+                                                            <JFXTextField prefWidth="146.0" promptText="0000000">
+                                                               <VBox.margin>
+                                                                  <Insets top="1.0" />
+                                                               </VBox.margin></JFXTextField>
+                                                            <JFXTextField layoutX="10.0" layoutY="10.0" promptText="0000000">
+                                                               <VBox.margin>
+                                                                  <Insets top="4.0" />
+                                                               </VBox.margin></JFXTextField>
+                                                            <JFXTextField layoutX="10.0" layoutY="35.0" promptText="0000000">
+                                                               <VBox.margin>
+                                                                  <Insets top="3.0" />
+                                                               </VBox.margin></JFXTextField>
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #ded8d8; -fx-background-radius: 15; -fx-border-radius: 15;">
+                                 <FlowPane.margin>
+                                    <Insets bottom="15.0" right="15.0" />
+                                 </FlowPane.margin>
+                                 <children>
+                                    <HBox prefHeight="198.0" prefWidth="402.0">
+                                       <children>
+                                          <ImageView fitHeight="156.0" fitWidth="270.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/ventes.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="4.0" right="5.0" top="4.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <VBox>
+                                             <children>
+                                                <Label prefHeight="74.0" prefWidth="202.0" text="Ventes">
+                                                   <font>
+                                                      <Font name="System Bold" size="48.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox>
+                                                   <children>
+                                                      <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Ventes">
+                                                         <font>
+                                                            <Font size="17.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="8.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                   </children>
+                                                </HBox>
+                                                <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
+                                                   <VBox.margin>
+                                                      <Insets left="8.0" right="10.0" />
+                                                   </VBox.margin>
+                                                </JFXTextField>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #428df5; -fx-background-radius: 15; -fx-border-radius: 15;">
+                                 <FlowPane.margin>
+                                    <Insets bottom="15.0" />
+                                 </FlowPane.margin>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                                 <children>
+                                    <ImageView fitHeight="192.0" fitWidth="200.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resources/achats.png" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox layoutX="192.0" layoutY="14.0" prefHeight="184.0" prefWidth="202.0">
+                                       <children>
+                                          <Label prefHeight="70.0" prefWidth="207.0" text="Achats">
+                                             <font>
+                                                <Font name="System Bold" size="48.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox>
+                                             <children>
+                                                <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Achats">
+                                                   <font>
+                                                      <Font size="17.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
+                                             <VBox.margin>
+                                                <Insets left="8.0" right="10.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #eb3434; -fx-background-radius: 15; -fx-border-radius: 15;">
+                                 <FlowPane.margin>
+                                    <Insets right="15.0" />
+                                 </FlowPane.margin>
+                                 <children>
+                                    <ImageView fitHeight="142.0" fitWidth="242.0" layoutX="-2.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resources/credit.png" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox layoutX="243.0" layoutY="-1.0" prefHeight="201.0" prefWidth="157.0">
+                                       <children>
+                                          <Label prefHeight="74.0" prefWidth="222.0" text="Credit">
+                                             <font>
+                                                <Font name="System Bold" size="45.0" />
+                                             </font>
+                                          </Label>
+                                          <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Credits">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                          </Label>
+                                          <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
+                                 <FlowPane.margin>
+                                    <Insets right="15.0" />
+                                 </FlowPane.margin>
+                                 <children>
+                                    <ImageView fitHeight="150.0" fitWidth="214.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="25.0">
+                                       <image>
+                                          <Image url="@../../resources/clients.png" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox layoutX="226.0" prefHeight="200.0" prefWidth="173.0">
+                                       <children>
+                                          <Label prefHeight="74.0" prefWidth="202.0" text="Clients">
+                                             <font>
+                                                <Font name="System Bold" size="48.0" />
+                                             </font>
+                                          </Label>
+                                          <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Clients">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                          </Label>
+                                          <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: grey; -fx-background-radius: 15; -fx-border-radius: 15;">
+                                 <children>
+                                    <ImageView fitHeight="192.0" fitWidth="194.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resources/fourni.png" />
+                                       </image></ImageView>
+                                    <VBox layoutX="184.0" layoutY="8.0" prefHeight="184.0" prefWidth="202.0">
+                                       <children>
+                                          <Label prefHeight="70.0" prefWidth="207.0" text="Fourniseeurs">
+                                             <font>
+                                                <Font name="System Bold" size="32.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox>
+                                             <children>
+                                                <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Fournisseurs">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets left="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
+                                             <VBox.margin>
+                                                <Insets left="8.0" right="10.0" />
+                                             </VBox.margin>
+                                          </JFXTextField>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="25.0" top="10.0" />
+                           </padding>
+                        </FlowPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+   </children>
+</AnchorPane>

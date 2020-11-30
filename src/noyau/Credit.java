@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Credit extends Vente{
-    private double somme_remb=0;
-    private double somme_rest=0;
+    private double somme_remb;
+    private double somme_rest;
 
     public Credit( Date date, Personne client, ArrayList<Piece> piece_vendu, double prix_totale, double somme_remb) {
         super( date, client, piece_vendu);
