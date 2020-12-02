@@ -46,4 +46,8 @@ public class Personne {
     public void setTeephone(String teephone) {
         this.teephone = teephone;
     }
+
+    public String getId() {
+        return id;
+    }
 }

@@ -1,18 +1,24 @@
 package Application.login;
 
+import Application.magasin.MagasinController;
 import Bdd.BddConnection;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import noyau.Utilisateur;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,7 +37,7 @@ public class LoginController implements Initializable {
     private JFXTextField txfNomDeLutilisateur;
 
     @FXML
-    private JFXTextField txfMtp;
+    private JFXPasswordField txfMtp;
 
     @FXML
     private JFXButton btnConnecter;
@@ -42,6 +48,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         txfNomDeLutilisateur.setOnMouseClicked(mouseEvent -> plaqueErreur.setText(""));
         txfMtp.setOnMouseClicked(mouseEvent -> plaqueErreur.setText(""));
         logoLabel.setVisible(false);
@@ -52,9 +59,10 @@ public class LoginController implements Initializable {
         transition.setAutoReverse(false);
         transition.play();
         transition.setOnFinished(actionEvent -> logoLabel.setVisible(true));
-        txfMtp.setText("");
-        txfNomDeLutilisateur.setText("");
+        txfMtp.setText("sari");
+        txfNomDeLutilisateur.setText("imedq");
         connection = BddConnection.getConnection();
+
 
     }
     public void transitionDesComposants(Node element) {// Methode d'animation de 'Shake'
@@ -84,12 +92,12 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void login()  {
+    private void login() throws SQLException {
         if(this.connection != null){
             String mtp = this.txfMtp.getText();
             String nomDeLutilisateur = this.txfNomDeLutilisateur.getText();
-            PreparedStatement pr;
-            ResultSet rs;
+            PreparedStatement pr = null;
+            ResultSet rs = null;
             String sqlQuery="SELECT * FROM admin where nom = ? and mtp = ?";
             try {
                 pr = this.connection.prepareStatement(sqlQuery);
@@ -97,8 +105,24 @@ public class LoginController implements Initializable {
                 pr.setString(2,mtp);
                 rs = pr.executeQuery();
                 if (rs.next()){
+                    String prenom = rs.getString("prenom") ;
+                    String id = rs.getString("ID");
+                    String adresse= rs.getString("adress");
+                    String telephone = rs.getString("telephone");
                     System.out.println("connecté");
-                    ((Stage)btnConnecter.getScene().getWindow()).close();
+                    Utilisateur admin = new Utilisateur(nomDeLutilisateur,prenom,adresse,telephone,mtp,id);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../magasin/magasin.fxml"));
+                    Stage stage = new Stage();
+                    Parent root = loader.load();
+                    MagasinController magasinController=loader.getController();
+                    magasinController.setAdmin(admin);
+                    magasinController.setData();
+                    Scene scene = new Scene(root);
+                    stage.setTitle("Gestion de Vente");
+                    stage.setScene(scene);
+                    stage.setResizable(false);
+                    stage.show();
+                    ((Stage)(btnConnecter.getScene().getWindow())).close();
                 }else{
                     System.out.println("failled");
                     transitionDesComposants(txfMtp);
@@ -108,6 +132,12 @@ public class LoginController implements Initializable {
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            } catch(IOException e){
+                e.printStackTrace();
+            } finally {
+                pr.close();
+                rs.close();
+
             }
 
 

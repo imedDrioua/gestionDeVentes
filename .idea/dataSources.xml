@@ -12,5 +12,16 @@
         </library>
       </libraries>
     </data-source>
+    <data-source source="LOCAL" name="magasin [2]" uuid="3dd8cbef-5ac0-4f4f-8a3f-670605c557a5">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\gestionDevente\magasin</jdbc-url>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
+        </library>
+      </libraries>
+    </data-source>
   </component>
 </project>

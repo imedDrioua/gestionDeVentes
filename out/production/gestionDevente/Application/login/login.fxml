@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.scene.control.Label?>
@@ -12,6 +13,7 @@
 
 <AnchorPane maxHeight="500.0" maxWidth="700.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.login.LoginController">
    <children>
+      <JFXPasswordField fx:id="txfMtp" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="345.0" prefHeight="25.0" prefWidth="225.0" promptText="Mot De Passe" unFocusColor="BLACK" />
       <Pane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #7400FF;">
          <children>
             <ImageView fx:id="voiture" fitHeight="354.0" fitWidth="350.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true">
@@ -36,12 +38,7 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txfNomDeLutilisateur" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="278.0" prefHeight="25.0" prefWidth="225.0" promptText="Nom de l'utilisateur" unFocusColor="#7400ff">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </JFXTextField>
-      <JFXTextField fx:id="txfMtp" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="342.0" prefHeight="25.0" prefWidth="225.0" promptText="Mot de passe" unFocusColor="#7400ff">
+      <JFXTextField fx:id="txfNomDeLutilisateur" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="278.0" prefHeight="25.0" prefWidth="225.0" promptText="Nom de l'utilisateur" unFocusColor="#070707">
          <font>
             <Font size="14.0" />
          </font>

@@ -56,9 +56,6 @@
                                  </font>
                               </Label>
                            </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
                         </AnchorPane>
                         <AnchorPane fx:id="aboutBtn" layoutX="1132.0" prefHeight="112.0" prefWidth="160.0">
                            <children>
@@ -69,9 +66,6 @@
                               </Label>
                               <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="47.0" size="4em" />
                            </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
                         </AnchorPane>
                         <AnchorPane fx:id="infoBtn" layoutX="702.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
                            <children>
@@ -82,9 +76,6 @@
                                  </font>
                               </Label>
                            </children>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
                         </AnchorPane>
                      </children></AnchorPane>
               </content>
