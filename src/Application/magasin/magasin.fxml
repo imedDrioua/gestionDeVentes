@@ -5,11 +5,13 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -47,7 +49,7 @@
                               <Image url="@../../resources/pieceAutou.png" />
                            </image>
                         </ImageView>
-                        <AnchorPane fx:id="ajouteUtilisateurBtn" layoutX="538.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+                        <AnchorPane fx:id="ajouteUtilisateurBtn" layoutX="538.0" layoutY="1.0" onMouseClicked="#nouveauUtilisateur" prefHeight="110.0" prefWidth="160.0">
                            <children>
                               <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="61.0" layoutY="44.0" size="4em" />
                               <Label layoutX="9.0" layoutY="63.0" text="Nouveau Utilisateur" textFill="WHITE">
@@ -60,27 +62,27 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </AnchorPane>
-                        <AnchorPane fx:id="aboutBtn" layoutX="1132.0" prefHeight="112.0" prefWidth="160.0">
+                        <AnchorPane fx:id="aboutBtn" layoutX="1132.0" layoutY="1.0" prefHeight="112.0" prefWidth="160.0">
                            <children>
-                              <Label layoutX="58.0" layoutY="63.0" text="About" textFill="WHITE">
+                              <Label layoutX="58.0" layoutY="61.0" text="About" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="47.0" size="4em" />
+                              <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="42.0" size="4em" />
                            </children>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </AnchorPane>
-                        <AnchorPane fx:id="infoBtn" layoutX="702.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+                        <AnchorPane fx:id="infoBtn" layoutX="702.0" layoutY="1.0" onMouseClicked="#catalogue" prefHeight="110.0" prefWidth="160.0">
                            <children>
-                              <FontAwesomeIcon fill="WHITE" iconName="INFO" layoutX="71.0" layoutY="47.0" size="4em" />
-                              <Label layoutX="37.0" layoutY="63.0" text="Information" textFill="WHITE">
+                              <Label layoutX="20.0" layoutY="63.0" text="Ctalogue Admins" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
+                              <FontAwesomeIcon fill="WHITE" iconName="BOOK" layoutX="57.0" layoutY="44.0" size="4em" />
                            </children>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -509,15 +511,15 @@
                         </ImageView>
                         <AnchorPane layoutX="33.0" layoutY="15.0" prefHeight="424.0" prefWidth="617.0" style="-fx-border-width: 2; -fx-border-color: #7400FF;">
                            <children>
-                              <JFXTextField fx:id="nomMonCpt" focusColor="#7400ff" labelFloat="true" layoutX="110.0" layoutY="30.0" prefHeight="39.0" prefWidth="215.0">
+                              <JFXTextField fx:id="nomMonCpt" focusColor="#7400ff" labelFloat="true" layoutX="110.0" layoutY="30.0" prefHeight="39.0" prefWidth="215.0" text="imed" AnchorPane.topAnchor="30.0">
                                  <font>
-                                    <Font name="MV Boli" size="23.0" />
+                                    <Font name="Sitka Small" size="20.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <padding>
-                                    <Insets bottom="2.0" />
+                                    <Insets bottom="2.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
                               <JFXPasswordField fx:id="mtpMonCpt" labelFloat="true" layoutX="150.0" layoutY="222.0" prefHeight="39.0" prefWidth="215.0">
@@ -530,7 +532,7 @@
                               </JFXPasswordField>
                               <JFXTextField fx:id="adrMonCpt" alignment="CENTER" focusColor="#7400ff" labelFloat="true" layoutX="6.0" layoutY="309.0" prefHeight="42.0" prefWidth="592.0" promptText="Adresse" stylesheets="@txf.css">
                                  <font>
-                                    <Font name="MV Boli" size="20.0" />
+                                    <Font name="Sitka Small" size="22.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -549,7 +551,7 @@
                               <Line endX="-18.0" layoutX="108.0" layoutY="70.0" startX="-100.0" strokeWidth="0.5" />
                               <Label layoutX="5.0" layoutY="37.0" prefHeight="30.0" prefWidth="92.0" text="Nom        :" textFill="#7400ff">
                                  <font>
-                                    <Font name="System Bold" size="16.0" />
+                                    <Font name="Sitka Small Bold" size="16.0" />
                                  </font>
                               </Label>
                               <Line endX="-8.0" layoutX="108.0" layoutY="129.0" startX="-100.0" strokeWidth="0.5" />
@@ -580,29 +582,84 @@
                               </JFXButton>
                               <JFXTextField fx:id="prenomMonCpt" focusColor="#7400ff" labelFloat="true" layoutX="110.0" layoutY="86.0" prefHeight="39.0" prefWidth="215.0">
                                  <font>
-                                    <Font name="MV Boli" size="23.0" />
+                                    <Font name="Sitka Small" size="20.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <padding>
-                                    <Insets bottom="2.0" />
+                                    <Insets bottom="2.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
                               <JFXTextField fx:id="tlpMonCpt" focusColor="#7400ff" labelFloat="true" layoutX="117.0" layoutY="155.0" prefHeight="39.0" prefWidth="215.0">
                                  <font>
-                                    <Font name="MV Boli" size="23.0" />
+                                    <Font name="Sitka Small" size="20.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <padding>
-                                    <Insets bottom="2.0" />
+                                    <Insets bottom="2.0" top="5.0" />
                                  </padding>
                               </JFXTextField>
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="nouveauUtilisateurTab" text="Nouveau utilisateur">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-width: 3; -fx-border-color: #7400FF;">
+                     <children>
+                        <ImageView fitHeight="340.0" fitWidth="299.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/nvutilisateur.png" />
+                           </image>
+                        </ImageView>
+                        <JFXTextField fx:id="nuNom" focusColor="#7400ff" labelFloat="true" layoutX="336.0" layoutY="27.0" prefHeight="25.0" prefWidth="383.0" promptText="Nom" />
+                        <JFXTextField fx:id="nuPrenom" focusColor="#7400ff" labelFloat="true" layoutX="336.0" layoutY="80.0" prefHeight="25.0" prefWidth="383.0" promptText="Prénom" />
+                        <JFXTextField fx:id="nuTlp" focusColor="#7400ff" labelFloat="true" layoutX="336.0" layoutY="133.0" prefHeight="25.0" prefWidth="383.0" promptText="Téléphone" />
+                        <JFXTextField fx:id="nuAdr" focusColor="#7400ff" labelFloat="true" layoutX="336.0" layoutY="237.0" prefHeight="25.0" prefWidth="636.0" promptText="Adresse" />
+                        <JFXButton fx:id="nuBtn" buttonType="RAISED" disable="true" layoutX="336.0" layoutY="271.0" onAction="#validerNouveauUtilisateur" prefHeight="42.0" prefWidth="386.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
+                           <font>
+                              <Font name="FontAwesome Regular" size="19.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXPasswordField fx:id="nuMtp" labelFloat="true" layoutX="336.0" layoutY="188.0" prefHeight="25.0" prefWidth="384.0" promptText="Mot de passe" />
+                        <ImageView fitHeight="209.0" fitWidth="379.0" layoutX="916.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/marks.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="728.0" layoutY="31.0" prefHeight="26.0" prefWidth="28.0" text="*" textFill="RED">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="728.0" layoutY="185.0" prefHeight="26.0" prefWidth="28.0" text="*" textFill="RED">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="catalogueAdminTab" text="Ctalogue Admins">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-width: 3; -fx-border-color: #7400FF;">
+                     <children>
+                        <JFXTreeTableView fx:id="tableAdmin" layoutX="4.0" layoutY="4.0" prefHeight="449.0" prefWidth="1293.0">
+                           <columns>
+                              <TreeTableColumn fx:id="idRow" prefWidth="47.0" text="ID" />
+                              <TreeTableColumn fx:id="nomRow" prefWidth="184.0" text="Nom" />
+                              <TreeTableColumn fx:id="prenomRow" prefWidth="184.0" text="Prénom" />
+                              <TreeTableColumn fx:id="tlpRow" prefWidth="184.0" text="Téléphone" />
+                              <TreeTableColumn fx:id="adrRow" prefWidth="521.0" text="Adresse" />
+                           </columns>
+                        </JFXTreeTableView>
+                     </children>
+                  </AnchorPane>
               </content>
             </Tab>
          </tabs>

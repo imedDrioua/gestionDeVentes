@@ -14,5 +14,13 @@ public class Magasin {
         this.carnet_des_achats = carnet_des_achats;
         this.carnet_de_credit = carnet_de_credit;
     }
+    public Magasin(){}
 
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
 }

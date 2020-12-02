@@ -41,6 +41,7 @@
     </column>
     <column id="16" parent="6" name="ID">
       <Position>6</Position>
+      <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <index id="17" parent="6" name="sqlite_autoindex_admin_1">

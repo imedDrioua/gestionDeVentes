@@ -1,18 +1,20 @@
 package noyau;
 
-public class Personne {
-    protected String id="";
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class Personne extends RecursiveTreeObject<Utilisateur> {
+    protected int id;
     protected String nom="";
     protected String prenom="";
     protected String adresse="";
-    protected String teephone="";
+    protected String telephone ="";
 
-    public Personne(String nom, String prenom, String adresse, String teephone,String id) {
+    public Personne(String nom, String prenom, String adresse, String telephone, int id) {
         this.id=id;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
-        this.teephone = teephone;
+        this.telephone = telephone;
     }
 
     public String getNom() {
@@ -39,15 +41,15 @@ public class Personne {
         this.adresse = adresse;
     }
 
-    public String getTeephone() {
-        return teephone;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setTeephone(String teephone) {
-        this.teephone = teephone;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 }

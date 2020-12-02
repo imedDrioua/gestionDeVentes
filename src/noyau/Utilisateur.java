@@ -3,7 +3,7 @@ package noyau;
 public class Utilisateur extends Personne{
        private String mot_de_passe="";
 
-       public Utilisateur(String nom, String prenom, String adresse, String teephone, String mot_de_passe,String id) {
+       public Utilisateur(String nom, String prenom, String adresse, String teephone, String mot_de_passe,int id) {
               super(nom, prenom, adresse, teephone,id);
               this.mot_de_passe = mot_de_passe;
        }
