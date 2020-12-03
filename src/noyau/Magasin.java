@@ -1,8 +1,11 @@
 package noyau;
 
+import java.util.ArrayList;
+
 public class Magasin {
 
-    private Utilisateur utilisateur;
+    private Utilisateur admin;
+    private ArrayList<Utilisateur> utilisateurs ;
     private Stock stock;
     private Carnet carnet_des_ventes;
     private Carnet carnet_des_achats;
@@ -17,10 +20,26 @@ public class Magasin {
     public Magasin(){}
 
     public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+        this.admin = utilisateur;
     }
 
     public Utilisateur getUtilisateur() {
-        return utilisateur;
+        return admin;
+    }
+
+    public ArrayList<Utilisateur> getUtilisateurs() {
+        return utilisateurs;
+    }
+
+    public void setUtilisateurs(ArrayList<Utilisateur> utilisateurs) {
+        this.utilisateurs = utilisateurs;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

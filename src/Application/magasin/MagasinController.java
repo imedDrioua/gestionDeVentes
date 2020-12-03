@@ -3,26 +3,32 @@ package Application.magasin;
 import Application.Controller;
 import Bdd.BddConnection;
 import com.jfoenix.controls.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import noyau.Magasin;
+import noyau.Piece;
+import noyau.Stock;
 import noyau.Utilisateur;
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.ResourceBundle;
 
 public class MagasinController extends Controller implements Initializable {
     Magasin magasin;
+    Stock stock;
     Utilisateur admin ;
     Connection connection;
     PreparedStatement pr = null;
@@ -89,23 +95,59 @@ public class MagasinController extends Controller implements Initializable {
     private JFXButton nuBtn;
 
     @FXML
-    private JFXTreeTableView<Utilisateur> tableAdmin;
+    private TableView<Utilisateur> tableAdmin;
 
 
     @FXML
-    private TreeTableColumn<Utilisateur, Integer> idRow;
+    private TableColumn<Utilisateur, Integer> idRow;
 
     @FXML
-    private TreeTableColumn<Utilisateur, String> nomRow;
+    private TableColumn<Utilisateur, String> nomRow;
 
     @FXML
-    private TreeTableColumn<Utilisateur,String> prenomRow;
+    private TableColumn<Utilisateur,String> prenomRow;
 
     @FXML
-    private TreeTableColumn<Utilisateur,String> tlpRow;
+    private TableColumn<Utilisateur,String> tlpRow;
 
     @FXML
-    private TreeTableColumn<Utilisateur,String> adrRow;
+    private TableColumn<Utilisateur,String> adrRow;
+
+    @FXML
+    private TableView<Piece> tablePiece;
+
+    @FXML
+    private TableColumn<Piece, String> referenceRow;
+
+    @FXML
+    private TableColumn<Piece, String> desRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> prixVenteRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> prixAchatRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> stockRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> totaleVenteRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> totaleAchatRow;
+
+    @FXML
+    private AnchorPane cataloguePieceBtn;
+
+    @FXML
+    private AnchorPane nvPieceBtn;
+
+    @FXML
+    private AnchorPane printBtn;
+
+    @FXML
+    private Tab cataloguePiece;
 
 
     @FXML
@@ -152,7 +194,13 @@ public class MagasinController extends Controller implements Initializable {
                 pr.setString(3,nuTlp.getText());
                 pr.setString(4,nuAdr.getText());
                 pr.setString(5,nuPrenom.getText());
-                System.out.println( pr.executeUpdate());
+                if( pr.executeUpdate()==1){
+                    Utilisateur nvUser = new Utilisateur(nuNom.getText(),nuPrenom.getText(),nuAdr.getText(),nuTlp.getText(),nuMtp.getText(),Controller.getIdAdmins() + 1);
+                    magasin.getUtilisateurs().add(nvUser);
+                }
+
+               this.updateUsers();
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }finally {
@@ -162,89 +210,123 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
+    @FXML
+    private void monCompte(){
+        if(! tabDeTravaille.getTabs().contains(monCompteTab)) {
+            tabDeTravaille.getTabs().add(monCompteTab);
+            tabDeTravaille.getSelectionModel().select(monCompteTab);
+        }else tabDeTravaille.getSelectionModel().select(monCompteTab);
+    }
+    @FXML
+    private void nouveauUtilisateur(){
+        if(! tabDeTravaille.getTabs().contains(nouveauUtilisateurTab)) {
+            tabDeTravaille.getTabs().add(nouveauUtilisateurTab);
+            tabDeTravaille.getSelectionModel().select(nouveauUtilisateurTab);
 
+        }else {
+            tabDeTravaille.getSelectionModel().select(nouveauUtilisateurTab);
+        }
 
-   private void apply(){
-       try {
-           this.pr=this.connection.prepareStatement(sql);
-       } catch (SQLException throwables) {
-           throwables.printStackTrace();
-       }
-   }
-
+    }
+    @FXML
+    private void catalogue(){
+        if(! tabDeTravaille.getTabs().contains(catalogueAdminTab)) {
+            tabDeTravaille.getTabs().add(catalogueAdminTab);
+            tabDeTravaille.getSelectionModel().select(catalogueAdminTab);
+        }else     tabDeTravaille.getSelectionModel().select(catalogueAdminTab);
+    }
+    @FXML
+    private void cataloguePiece(){
+        if(! tabDeTravaille.getTabs().contains(cataloguePiece)) {
+            tabDeTravaille.getTabs().add(cataloguePiece);
+            tabDeTravaille.getSelectionModel().select(cataloguePiece);
+        }else     tabDeTravaille.getSelectionModel().select(cataloguePiece);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        tabDeTravaille.getTabs().remove(2);
-        tabDeTravaille.getTabs().remove(1);
+        this.closeTab(nouveauUtilisateurTab);
+        this.closeTab(monCompteTab);
+        this.closeTab(catalogueAdminTab);
+        this.closeTab(cataloguePiece);
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
 
-        nomMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(nomMonCpt.getText().trim().equals(admin.getNom().trim())));
+        nomMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getNom().trim())));
         prenomMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getPrenom().trim())));
         tlpMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getTelephone().trim())));
         adrMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getAdresse().trim())));
         mtpMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getMot_de_passe().trim())));
-
+        this.addNumeriqueListener(tlpMonCpt);
+        this.addNumeriqueListener(nuTlp);
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
         ///////////////////////// Buttons Events ///////////////////////////////////////////////////////////////////////////////
-        monCompteBtn.setOnMouseEntered(mouseEvent -> monCompteBtn.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
-        monCompteBtn.setOnMouseExited(mouseEvent -> monCompteBtn.setStyle("-fx-background-color: transparent"));
-        ajouteUtilisateurBtn.setOnMouseEntered(mouseEvent -> ajouteUtilisateurBtn.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
-        ajouteUtilisateurBtn.setOnMouseExited(mouseEvent -> ajouteUtilisateurBtn.setStyle("-fx-background-color: transparent"));
-        infoBtn.setOnMouseEntered(mouseEvent -> infoBtn.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
-        infoBtn.setOnMouseExited(mouseEvent -> infoBtn.setStyle("-fx-background-color: transparent"));
-        infoBtn.setOnMouseEntered(mouseEvent -> infoBtn.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
-        infoBtn.setOnMouseExited(mouseEvent -> infoBtn.setStyle("-fx-background-color: transparent"));
-        aboutBtn.setOnMouseEntered(mouseEvent -> aboutBtn.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
-        aboutBtn.setOnMouseExited(mouseEvent -> aboutBtn.setStyle("-fx-background-color: transparent"));
-         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.addHoverStyle(monCompteBtn);
+        this.addHoverStyle(ajouteUtilisateurBtn);
+        this.addHoverStyle(infoBtn);
+        this.addHoverStyle(aboutBtn);
+        this.addHoverStyle(cataloguePieceBtn);
+        this.addHoverStyle(nvPieceBtn);
+        this.addHoverStyle(printBtn);
         /////////////////////////Table Admin//////////////////////////////////////////////////////////////////////////////
-        idRow.setCellValueFactory(new TreeItemPropertyValueFactory<>("id"));
-        nomRow.setCellValueFactory(new TreeItemPropertyValueFactory<>("nom"));
-        prenomRow.setCellValueFactory(new TreeItemPropertyValueFactory<>("prenom"));
-        tlpRow.setCellValueFactory(new TreeItemPropertyValueFactory<>("telephone"));
-        adrRow.setCellValueFactory(new TreeItemPropertyValueFactory<>("adresse"));
+        idRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,Integer>("id"));
+        nomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("nom"));
+        prenomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("prenom"));
+        tlpRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("telephone"));
+        adrRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("adresse"));
+
+        referenceRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("reference"));
+        desRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("designiation"));
+        prixVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("prix_de_vente"));
+        prixAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("prix_de_achat"));
+        stockRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
+        totaleAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("factur_piece"));
+        totaleVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("benifice_piece"));
+
+
+
+
     }
     public void setData(){
         this.admin= magasin.getUtilisateur();
+        this.stock = magasin.getStock();
         nomMonCpt.setText(this.admin.getNom());
         prenomMonCpt.setText(this.admin.getPrenom());
         tlpMonCpt.setText(this.admin.getTelephone());
         mtpMonCpt.setText(this.admin.getMot_de_passe());
         adrMonCpt.setText(this.admin.getAdresse());
-        TreeItem<Utilisateur> parent = new TreeItem<>();
-     //   TreeItem<Utilisateur> item = new TreeItem<Utilisateur>(admin);
-        Collection<TreeItem<Utilisateur>> items = new ArrayList<TreeItem<Utilisateur>>();
-        items.add(new TreeItem(admin));
-        parent.getChildren().addAll( items);
-        tableAdmin.setRoot(parent);
-        tableAdmin.setShowRoot(false);
-
-
+        this.updateUsers();
+        this.updatePieces();
+    }
+    public void updateUsers(){
+        ObservableList<Utilisateur> adminsData = FXCollections.observableArrayList(this.magasin.getUtilisateurs());
+        tableAdmin.setItems(adminsData);
+    }
+    private void updatePieces(){
+        ObservableList<Piece> piecesData = FXCollections.observableArrayList(stock.getPieces_disponible().values());
+        tablePiece.setItems(piecesData);
     }
     public void setAdmin(Utilisateur admin) {
         this.admin = admin;
     }
-    @FXML
-    private void monCompte(){
-        tabDeTravaille.getTabs().add(monCompteTab);
-        tabDeTravaille.getSelectionModel().select(monCompteTab);
+    private void apply(){
+        try {
+            this.pr=this.connection.prepareStatement(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
-    @FXML
-    private void nouveauUtilisateur(){
-        tabDeTravaille.getTabs().add(nouveauUtilisateurTab);
-        tabDeTravaille.getSelectionModel().select(nouveauUtilisateurTab);
-    }
-    @FXML
-    private void catalogue(){
-        tabDeTravaille.getTabs().add(catalogueAdminTab);
-        tabDeTravaille.getSelectionModel().select(catalogueAdminTab);
-    }
-
     public void setMagasin(Magasin magasin) {
         this.magasin = magasin;
     }
+    private void closeTab(Tab tab) {
+        EventHandler<Event> handler = tab.getOnClosed();
+        if (null != handler) {
+            handler.handle(null);
+        } else {
+            tabDeTravaille.getTabs().remove(tab);
+        }
+    }
+
 }

@@ -1,8 +1,10 @@
 package Application;
 
+import com.jfoenix.controls.JFXTextField;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 public class Controller {
@@ -32,4 +34,27 @@ public class Controller {
         transition2.play();
         transition3.play();
     }
+    private static int idAdmins;
+
+    public static int getIdAdmins() {
+        return idAdmins;
+    }
+
+    public static void setIdAdmins(int idAdmins) {
+        Controller.idAdmins = idAdmins;
+    }
+    protected void addNumeriqueListener(JFXTextField textField){
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+    protected void addHoverStyle(AnchorPane anchor){
+        anchor.setOnMouseEntered(mouseEvent -> anchor.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
+        anchor.setOnMouseExited(mouseEvent -> anchor.setStyle("-fx-background-color: transparent"));
+    }
+
+
 }

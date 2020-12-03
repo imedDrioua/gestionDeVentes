@@ -21,7 +21,7 @@ public class Piece {
         calculerFactur();
     }
     private void calculerBenifice(){
-        this.benifice_piece = (prix_de_vente - prix_de_achat ) * stock_disponible;
+        this.benifice_piece = prix_de_vente * stock_disponible;
     }
     private  void calculerFactur(){
         this.factur_piece = prix_de_achat * stock_disponible;

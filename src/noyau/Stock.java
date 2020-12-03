@@ -36,4 +36,11 @@ public class Stock {
         pieces_disponible.remove(piece.getReference());
     }
 
+    public Map<String, Piece> getPieces_disponible() {
+        return pieces_disponible;
+    }
+
+    public void setPieces_disponible(Map<String, Piece> pieces_disponible) {
+        this.pieces_disponible = pieces_disponible;
+    }
 }

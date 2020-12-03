@@ -16,4 +16,8 @@ public class Utilisateur extends Personne{
               this.mot_de_passe = mot_de_passe;
        }
 
+       public boolean auth(String nomP,String mtpP){
+              return (nomP.equals(this.nom) && mtpP.equals(this.mot_de_passe));
+       }
+
 }

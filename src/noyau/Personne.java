@@ -2,7 +2,7 @@ package noyau;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-public class Personne extends RecursiveTreeObject<Utilisateur> {
+public class Personne  {
     protected int id;
     protected String nom="";
     protected String prenom="";

@@ -5,13 +5,13 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -33,8 +33,8 @@
                      <children>
                         <AnchorPane fx:id="monCompteBtn" layoutX="376.0" layoutY="1.0" onMouseClicked="#monCompte" prefHeight="110.0" prefWidth="160.0">
                            <children>
-                              <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="60.0" layoutY="44.0" size="4em" text="" />
-                              <Label layoutX="33.0" layoutY="62.0" text="Mon Compte" textFill="WHITE">
+                              <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="60.0" layoutY="57.0" size="4em" text="" />
+                              <Label layoutX="33.0" layoutY="75.0" text="Mon Compte" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -51,8 +51,8 @@
                         </ImageView>
                         <AnchorPane fx:id="ajouteUtilisateurBtn" layoutX="538.0" layoutY="1.0" onMouseClicked="#nouveauUtilisateur" prefHeight="110.0" prefWidth="160.0">
                            <children>
-                              <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="61.0" layoutY="44.0" size="4em" />
-                              <Label layoutX="9.0" layoutY="63.0" text="Nouveau Utilisateur" textFill="WHITE">
+                              <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="58.0" layoutY="57.0" size="4em" />
+                              <Label layoutX="17.0" layoutY="75.0" text="Nouveau Admin" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -64,12 +64,12 @@
                         </AnchorPane>
                         <AnchorPane fx:id="aboutBtn" layoutX="1132.0" layoutY="1.0" prefHeight="112.0" prefWidth="160.0">
                            <children>
-                              <Label layoutX="58.0" layoutY="61.0" text="About" textFill="WHITE">
+                              <Label layoutX="58.0" layoutY="75.0" text="About" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="42.0" size="4em" />
+                              <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="57.0" size="4em" />
                            </children>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -77,12 +77,12 @@
                         </AnchorPane>
                         <AnchorPane fx:id="infoBtn" layoutX="702.0" layoutY="1.0" onMouseClicked="#catalogue" prefHeight="110.0" prefWidth="160.0">
                            <children>
-                              <Label layoutX="20.0" layoutY="63.0" text="Ctalogue Admins" textFill="WHITE">
+                              <Label layoutX="20.0" layoutY="75.0" text="Ctalogue Admins" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <FontAwesomeIcon fill="WHITE" iconName="BOOK" layoutX="57.0" layoutY="44.0" size="4em" />
+                              <FontAwesomeIcon fill="WHITE" iconName="BOOK" layoutX="57.0" layoutY="57.0" size="4em" />
                            </children>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -95,29 +95,41 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;">
                      <children>
-                        <FontAwesomeIcon fill="WHITE" iconName="FILE" layoutX="250.0" layoutY="55.0" size="4em" />
+                        <AnchorPane fx:id="cataloguePieceBtn" layoutX="185.0" layoutY="1.0" onMouseClicked="#cataloguePiece" prefHeight="110.0" prefWidth="170.0">
+                           <children>
+                              <FontAwesomeIcon fill="WHITE" iconName="FILE" layoutX="60.0" layoutY="57.0" size="4em" />
+                              <Label layoutX="24.0" layoutY="75.0" text="Catalogue Piéces" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
                         <ImageView fitHeight="112.0" fitWidth="213.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/stockPhoto.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="196.0" layoutY="71.0" text="Catalogue Des Piéces" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="413.0" layoutY="55.0" size="4em" />
-                        <Label layoutX="379.0" layoutY="72.0" text="Nouvelle Piéce" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <FontAwesomeIcon fill="WHITE" iconName="PRINT" layoutX="563.0" layoutY="55.0" size="4em" />
-                        <Label layoutX="517.0" layoutY="73.0" text="Imprimer Catalogue" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Label>
+                        <AnchorPane fx:id="nvPieceBtn" layoutX="348.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+                           <children>
+                              <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="61.0" layoutY="57.0" size="4em" />
+                              <Label layoutX="27.0" layoutY="75.0" text="Nouvelle Piéce" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="printBtn" layoutX="507.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+                           <children>
+                              <FontAwesomeIcon fill="WHITE" iconName="PRINT" layoutX="58.0" layoutY="57.0" size="4em" />
+                              <Label layoutX="9.0" layoutY="75.0" text="Imprimer Catalogue" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
                         <JFXTextField focusColor="WHITE" labelFloat="true" layoutX="703.0" layoutY="20.0" prefHeight="25.0" prefWidth="185.0" promptText="Réference" unFocusColor="WHITE">
                            <font>
                               <Font name="Courier New Bold" size="18.0" />
@@ -561,7 +573,7 @@
                                  </font>
                               </Label>
                               <Line layoutX="108.0" layoutY="198.0" startX="-100.0" strokeWidth="0.5" />
-                              <Label layoutX="7.0" layoutY="162.0" prefHeight="30.0" prefWidth="121.0" text="Telephone   :  " textFill="#7400ff">
+                              <Label layoutX="7.0" layoutY="162.0" prefHeight="30.0" prefWidth="121.0" text="Téléphone  :  " textFill="#7400ff">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
@@ -649,15 +661,34 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-width: 3; -fx-border-color: #7400FF;">
                      <children>
-                        <JFXTreeTableView fx:id="tableAdmin" layoutX="4.0" layoutY="4.0" prefHeight="449.0" prefWidth="1293.0">
-                           <columns>
-                              <TreeTableColumn fx:id="idRow" prefWidth="47.0" text="ID" />
-                              <TreeTableColumn fx:id="nomRow" prefWidth="184.0" text="Nom" />
-                              <TreeTableColumn fx:id="prenomRow" prefWidth="184.0" text="Prénom" />
-                              <TreeTableColumn fx:id="tlpRow" prefWidth="184.0" text="Téléphone" />
-                              <TreeTableColumn fx:id="adrRow" prefWidth="521.0" text="Adresse" />
-                           </columns>
-                        </JFXTreeTableView>
+                        <TableView fx:id="tableAdmin" layoutX="4.0" layoutY="4.0" prefHeight="448.0" prefWidth="1292.0" stylesheets="@tableView.css">
+                          <columns>
+                            <TableColumn fx:id="idRow" editable="false" prefWidth="61.0" text="ID" />
+                            <TableColumn fx:id="nomRow" minWidth="0.0" prefWidth="240.0" text="Nom" />
+                              <TableColumn fx:id="prenomRow" minWidth="0.0" prefWidth="240.0" text="Prénom" />
+                              <TableColumn fx:id="tlpRow" prefWidth="240.0" text="Téléphone" />
+                              <TableColumn fx:id="adrRow" minWidth="0.0" prefWidth="521.0" text="Adresse" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="cataloguePiece" text="Catalogue Piéces">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3;">
+                     <children>
+                        <TableView fx:id="tablePiece" layoutX="2.0" layoutY="4.0" prefHeight="373.0" prefWidth="1293.0" stylesheets="@tableView.css">
+                          <columns>
+                            <TableColumn fx:id="referenceRow" prefWidth="116.0" text="Réference" />
+                            <TableColumn fx:id="desRow" prefWidth="391.0" text="Désigniation" />
+                              <TableColumn fx:id="prixVenteRow" prefWidth="112.0" text="Prix Vente" />
+                              <TableColumn fx:id="prixAchatRow" prefWidth="123.0" text="Prix Achat" />
+                              <TableColumn fx:id="stockRow" prefWidth="123.0" text="Stock" />
+                              <TableColumn fx:id="totaleVenteRow" prefWidth="222.0" text="Totale Vente" />
+                              <TableColumn fx:id="totaleAchatRow" prefWidth="203.0" text="Totale Achat" />
+                          </columns>
+                        </TableView>
                      </children>
                   </AnchorPane>
               </content>

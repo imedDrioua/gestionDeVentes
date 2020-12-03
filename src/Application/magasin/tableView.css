@@ -1,0 +1,36 @@
+.table-view{
+    -fx-background-color: white;
+    -fx-font-family: "Sitka Small";
+    -fx-font-size: 15;
+
+}
+
+.table-view .column-header .filter
+{
+    -fx-background-color: #AAAAAA;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+
+
+}
+
+.table-view .table-cell{
+
+    -fx-padding: 10 0 2 10px;
+    -fx-border-color: #7400FF;
+    -fx-border-width: 0.01;
+}
+.table-row-cell:hover {
+    -fx-background-color: #93f9b911;
+    -fx-text-background-color: #AAAAAA;
+}
+.table-row-cell:odd{
+    -fx-background-color: rgba(131, 115, 115, 0.07);
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.table-row-cell:even{
+    -fx-background-color:rgba(131, 115, 115, 0.07);
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}

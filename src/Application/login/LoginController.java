@@ -15,10 +15,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import noyau.Magasin;
+import noyau.Piece;
+import noyau.Stock;
 import noyau.Utilisateur;
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +29,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class LoginController extends Controller implements Initializable {
     @FXML
@@ -47,6 +50,7 @@ public class LoginController extends Controller implements Initializable {
     private Label plaqueErreur;
 
     private Connection connection = null;
+    private Utilisateur admin;
 
 
     @Override
@@ -73,25 +77,17 @@ public class LoginController extends Controller implements Initializable {
     @FXML
     private void login() throws SQLException {
         if(this.connection != null){
-            String mtp = this.txfMtp.getText();
-            String nomDeLutilisateur = this.txfNomDeLutilisateur.getText();
-            PreparedStatement pr = null;
-            ResultSet rs = null;
-            String sqlQuery="SELECT * FROM admin where nom = ? and mtp = ?";
             try {
-                pr = this.connection.prepareStatement(sqlQuery);
-                pr.setString(1,nomDeLutilisateur);
-                pr.setString(2,mtp);
-                rs = pr.executeQuery();
-                if (rs.next()){
-                    String prenom = rs.getString("prenom") ;
-                    int id = rs.getInt("ID");
-                    String adresse= rs.getString("adress");
-                    String telephone = rs.getString("telephone");
+                ArrayList<Utilisateur> adminItems=this.getUtilisateurs();
+                if (auth(txfNomDeLutilisateur.getText(),txfMtp.getText(),adminItems)){
                     System.out.println("connecté");
                     Magasin magasin=new Magasin();
-                    Utilisateur admin = new Utilisateur(nomDeLutilisateur,prenom,adresse,telephone,mtp,id);
                     magasin.setUtilisateur(admin);
+                    magasin.setUtilisateurs(adminItems);
+                    Stock stock = new Stock(this.loadStock(),new HashSet<>());
+                    System.out.println(this.loadStock());
+                    magasin.setStock(stock);
+                    this.getAdminsId();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../magasin/magasin.fxml"));
                     Stage stage = new Stage();
                     Parent root = loader.load();
@@ -115,14 +111,69 @@ public class LoginController extends Controller implements Initializable {
                 throwables.printStackTrace();
             } catch(IOException e){
                 e.printStackTrace();
-            } finally {
-                pr.close();
-                rs.close();
-
             }
 
 
         }
+    }
+    private boolean auth(String nom , String mtp,ArrayList<Utilisateur> users){
+        for (Utilisateur user : users){
+             if(user.auth(nom,mtp)==true) {
+                 this.admin=user;
+                 return true;
+             }
+
+        }
+        return false;
+    }
+    private void getAdminsId() throws SQLException {
+        this.connection = BddConnection.getConnection();
+        String idQuery = "SELECT MAX(ID) AS LAST FROM admin";
+        PreparedStatement pr = this.connection.prepareStatement(idQuery);
+        ResultSet rs = pr.executeQuery();
+        int currentID = Integer.parseInt(rs.getString("LAST"));
+        Controller.setIdAdmins(currentID );
+        pr.close();
+
+    }
+    private ArrayList<Utilisateur> getUtilisateurs() throws SQLException {
+        this.connection = BddConnection.getConnection();
+        String sqlQuery="SELECT * FROM admin";
+        PreparedStatement pr = this.connection.prepareStatement(sqlQuery);
+        ArrayList<Utilisateur> adminItems=new ArrayList<Utilisateur>();
+        ResultSet rs = pr.executeQuery();
+        while (rs.next()){
+            String nom = rs.getString("nom");
+            String prenom = rs.getString("prenom");
+            String tel = rs.getString("telephone");
+            String adresse=rs.getString("adress");
+            String mtp = rs.getString("mtp");
+            int id= rs.getInt("ID");
+            Utilisateur user = new Utilisateur(nom,prenom,adresse,tel,mtp,id);
+            adminItems.add(user);
+        }
+        pr.close();
+        rs.close();
+        return adminItems;
+
+    }
+    private Map<String, Piece> loadStock() throws SQLException {
+        Map<String , Piece> pieceDisponible=new HashMap<String,Piece>();
+        String sql="SELECT * FROM stock";
+        PreparedStatement pr = this.connection.prepareStatement(sql);
+        ResultSet rs = pr.executeQuery();
+        while (rs.next()){
+            String ref = rs.getString(1);
+            String des = rs.getString(2);
+            int pv = rs.getInt(3);
+            int pa = rs.getInt(4);
+            int sd = rs.getInt(5);
+            int id = rs.getInt(6);
+            Piece piece = new Piece(ref,des,pv,pa,sd);
+            pieceDisponible.put(ref , piece);
+
+        }
+        return pieceDisponible;
     }
 
 
