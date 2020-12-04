@@ -169,7 +169,7 @@ public class LoginController extends Controller implements Initializable {
             int pa = rs.getInt(4);
             int sd = rs.getInt(5);
             int id = rs.getInt(6);
-            Piece piece = new Piece(ref,des,pv,pa,sd);
+            Piece piece = new Piece(ref,des,pv,pa,sd,id);
             pieceDisponible.put(ref , piece);
 
         }

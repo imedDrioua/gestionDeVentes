@@ -71,9 +71,7 @@ public class Controller {
                         @Override
                         protected void updateItem(String item, boolean empty) {
                             if (item == getItem()) return;
-
                             super.updateItem(item, empty);
-
                             if (item == null) {
                                 super.setText(null);
                                 super.setGraphic(null);

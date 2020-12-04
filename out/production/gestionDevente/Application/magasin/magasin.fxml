@@ -110,7 +110,7 @@
                               <Image url="@../../resources/stockPhoto.png" />
                            </image>
                         </ImageView>
-                        <AnchorPane fx:id="nvPieceBtn" layoutX="348.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+                        <AnchorPane fx:id="nvPieceBtn" layoutX="348.0" layoutY="1.0" onMouseClicked="#nouvellePiece" prefHeight="110.0" prefWidth="160.0">
                            <children>
                               <FontAwesomeIcon fill="WHITE" iconName="PLUS" layoutX="61.0" layoutY="57.0" size="4em" />
                               <Label layoutX="27.0" layoutY="75.0" text="Nouvelle Piéce" textFill="WHITE">
@@ -703,42 +703,42 @@
                               <Image url="@../../resources/nvPiece.png" />
                            </image>
                         </ImageView>
-                        <JFXTextField fx:id="refNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="32.0" prefHeight="25.0" prefWidth="391.0" promptText="Réference">
+                        <JFXTextField fx:id="refNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="32.0" prefHeight="25.0" prefWidth="335.0" promptText="Réference">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="desNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="100.0" prefHeight="25.0" prefWidth="391.0" promptText="Désigniation">
+                        <JFXTextField fx:id="desNvPiece" alignment="CENTER" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="162.0" prefHeight="37.0" prefWidth="768.0" promptText="Désigniation">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="paNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="168.0" prefHeight="25.0" prefWidth="391.0" promptText="Prix D'achat">
+                        <JFXTextField fx:id="paNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="100.0" prefHeight="37.0" prefWidth="335.0" promptText="Prix D'achat">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </JFXTextField>
-                        <JFXTextField fx:id="pvNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="244.0" prefHeight="25.0" prefWidth="391.0" promptText="Prix De Vente">
+                        <JFXTextField fx:id="pvNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="100.0" prefHeight="25.0" prefWidth="335.0" promptText="Prix De Vente">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </JFXTextField>
-                        <Label layoutX="899.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                        <Label layoutX="848.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
                            <font>
                               <Font size="29.0" />
                            </font>
                         </Label>
-                        <Label layoutX="899.0" layoutY="311.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                        <Label layoutX="1273.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
                            <font>
                               <Font size="29.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="ndNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="317.0" prefHeight="25.0" prefWidth="391.0" promptText="Nombre Des Piéces">
+                        <JFXTextField fx:id="ndNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="31.0" prefHeight="37.0" prefWidth="335.0" promptText="Nombre Des Piéces">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </JFXTextField>
-                        <JFXButton fx:id="nvPieceVBtn" buttonType="RAISED" disable="true" layoutX="497.0" layoutY="374.0" prefHeight="35.0" prefWidth="391.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
+                        <JFXButton fx:id="nvPieceVBtn" buttonType="RAISED" disable="true" layoutX="788.0" layoutY="249.0" onAction="#validerNvPiece" prefHeight="35.0" prefWidth="186.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
                            <font>
                               <Font name="FontAwesome Regular" size="19.0" />
                            </font>

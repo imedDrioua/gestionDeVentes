@@ -34,17 +34,15 @@
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
-.table-view .virtual-flow .scroll-bar .increment-button,
+
 .table-view .virtual-flow .scroll-bar .decrement-button {
     -fx-opacity: 0;
     -fx-padding: 0;
     -fx-background-color: transparent;
     -fx-pref-width: 0;
 }
-.table-view .virtual-flow .scroll-bar:vertical .thumb{
-    -fx-background-color:  transparent;
-    -fx-pref-width: 0;
-}
+
+
 .table-view .virtual-flow .scroll-bar:horizontal .thumb {
     -fx-background-color:  transparent;
     -fx-pref-width: 0;

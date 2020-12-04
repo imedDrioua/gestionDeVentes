@@ -3,6 +3,7 @@ package noyau;
 import java.util.Objects;
 
 public class Piece {
+    private int id;
     private String reference="";
     private String designiation="";
     private double prix_de_vente=0;
@@ -12,7 +13,8 @@ public class Piece {
     private double factur_piece=0;
     private double benifice_piece=0;
 
-    public Piece(String reference, String designiation, double prix_de_vente, double prix_de_achat, int stock_disponible) {
+    public Piece(String reference, String designiation, double prix_de_vente, double prix_de_achat, int stock_disponible,int id) {
+        this.id=id;
         this.reference = reference;
         this.designiation = designiation;
         this.prix_de_vente = prix_de_vente;
@@ -21,6 +23,9 @@ public class Piece {
         calculerTotaleVente();
         calculerFactur();
         calculerBenifice();
+    }
+    public Piece(){
+
     }
     private void calculerTotaleVente(){
         this.totaleVente_piece = prix_de_vente * stock_disponible;
@@ -78,10 +83,20 @@ public class Piece {
     public double getFactur_piece() {
         return factur_piece;
     }
+
+    public int getId() {
+        return id;
+    }
+
     public double getBenifice_piece() {
         return benifice_piece;
     }
     public void inccrementer(int value){
-        this.stock_disponible =+ value;
+        this.stock_disponible =this.stock_disponible+ value;
+    }
+    public void calculer(){
+        this.calculerTotaleVente();
+        this.calculerFactur();
+        this.calculerBenifice();
     }
 }

@@ -209,7 +209,6 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private void validerNouveauUtilisateur() throws SQLException {
         this.connection=BddConnection.getConnection();
-        int id=nuMtp.hashCode();
         if(this.connection != null){
             this.sql="INSERT INTO admin(nom,mtp,telephone,adress,prenom) VALUES(?,?,?,?,?)";
             try {
@@ -230,6 +229,58 @@ public class MagasinController extends Controller implements Initializable {
                 throwables.printStackTrace();
             }finally {
                 this.pr.close();
+            }
+
+        }
+
+    }
+    @FXML
+    private void validerNvPiece() throws SQLException {
+        this.connection=BddConnection.getConnection();
+        if(this.connection != null){
+            String ref=refNvPiece.getText().trim().toUpperCase();
+            int nd=Integer.parseInt(ndNvPiece.getText().trim());
+            Piece exPiece = this.stock.getPieces_disponible().get(ref);
+            if(exPiece == null){
+                String des=desNvPiece.getText().trim().toUpperCase();
+                int prixV=Integer.parseInt(pvNvPiece.getText().trim());
+                int prixA=Integer.parseInt(paNvPiece.getText().trim());
+                Piece nvPiece = new Piece(ref,des,prixV,prixA,nd,0);
+                this.stock.getPieces_disponible().put(ref,nvPiece);
+                this.sql="INSERT INTO stock(reference,designiation,prixVente,prixAchat,stockDisponible) VALUES(?,?,?,?,?)";
+                try{
+                    this.apply();
+                    pr.setString(1,ref);
+                    pr.setString(2,des);
+                    pr.setString(3,String.valueOf(prixV));
+                    pr.setString(4,String.valueOf(prixA));
+                    pr.setString(5,String.valueOf(nd));
+                    pr.executeUpdate();
+
+                    this.updatePieces();
+                }catch (SQLException throwables){
+                    throwables.printStackTrace();
+                }finally {
+                    pr.close();
+                }
+            }else{
+                exPiece.inccrementer(nd);
+                this.sql="UPDATE stock SET reference = ?, designiation = ?, prixVente = ?, prixAchat = ?, stockDisponible = ? WHERE ID = ?";
+                try {
+                    this.apply();
+                    this.pr.setString(1, ref);
+                    this.pr.setString(2, exPiece.getDesigniation());
+                    this.pr.setString(3, String.valueOf(exPiece.getPrix_de_vente()));
+                    this.pr.setString(4, String.valueOf(exPiece.getPrix_de_achat()));
+                    this.pr.setString(5, String.valueOf(exPiece.getStock_disponible()));
+                    this.pr.setInt(6, exPiece.getId());
+                    System.out.println(this.pr.executeUpdate());
+                    tablePiece.refresh();
+                }catch (SQLException throwables){
+                    throwables.printStackTrace();
+                }finally {
+                    pr.close();
+                }
             }
 
         }
@@ -267,6 +318,13 @@ public class MagasinController extends Controller implements Initializable {
             tabDeTravaille.getSelectionModel().select(cataloguePiece);
         }else     tabDeTravaille.getSelectionModel().select(cataloguePiece);
     }
+    @FXML
+    private void nouvellePiece(){
+        if(! tabDeTravaille.getTabs().contains(nvPieceTab)) {
+            tabDeTravaille.getTabs().add(nvPieceTab);
+            tabDeTravaille.getSelectionModel().select(nvPieceTab);
+        }else     tabDeTravaille.getSelectionModel().select(nvPieceTab);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -274,6 +332,7 @@ public class MagasinController extends Controller implements Initializable {
         this.closeTab(monCompteTab);
         this.closeTab(catalogueAdminTab);
         this.closeTab(cataloguePiece);
+        this.closeTab(nvPieceTab);
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
 
@@ -339,6 +398,7 @@ public class MagasinController extends Controller implements Initializable {
         ObservableList<Piece> piecesData = FXCollections.observableArrayList(stock.getPieces_disponible().values());
         tablePiece.setItems(piecesData);
     }
+
     public void setAdmin(Utilisateur admin) {
         this.admin = admin;
     }
