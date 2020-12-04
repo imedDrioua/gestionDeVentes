@@ -3,9 +3,16 @@ package Application;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import javafx.util.Duration;
+import noyau.Piece;
 
 public class Controller {
 
@@ -55,6 +62,37 @@ public class Controller {
         anchor.setOnMouseEntered(mouseEvent -> anchor.setStyle("-fx-background-color: Blue;-fx-background-radius: 30"));
         anchor.setOnMouseExited(mouseEvent -> anchor.setStyle("-fx-background-color: transparent"));
     }
+    public static final Callback<TableColumn<Piece,String>, TableCell<Piece,String>> WRAPPING_CELL_FACTORY =
+            new Callback<>() {
+
+                @Override
+                public TableCell<Piece, String> call(TableColumn<Piece, String> param) {
+                    TableCell<Piece, String> tableCell = new TableCell<Piece, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            if (item == getItem()) return;
+
+                            super.updateItem(item, empty);
+
+                            if (item == null) {
+                                super.setText(null);
+                                super.setGraphic(null);
+                            } else {
+                                super.setText(null);
+                                Label l = new Label(item);
+                                l.setWrapText(true);
+                                VBox box = new VBox(l);
+                                l.heightProperty().addListener((observable, oldValue, newValue) -> {
+                                    box.setPrefHeight(newValue.doubleValue() + 7);
+                                    Platform.runLater(() -> this.getTableRow().requestLayout());
+                                });
+                                super.setGraphic(box);
+                            }
+                        }
+                    };
+                    return tableCell;
+                }
+            };
 
 
 }

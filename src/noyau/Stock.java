@@ -17,7 +17,7 @@ public class Stock {
     }
     public void calculerBenifice(){
        for (Piece piece : pieces_disponible.values()){
-           this.benifice =+ piece.getBenifice_piece();
+           this.benifice =+ piece.getTotaleVente_piece();
        }
     }
     public void calculerFactur(){
@@ -43,4 +43,5 @@ public class Stock {
     public void setPieces_disponible(Map<String, Piece> pieces_disponible) {
         this.pieces_disponible = pieces_disponible;
     }
+
 }

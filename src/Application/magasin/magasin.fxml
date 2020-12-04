@@ -676,19 +676,76 @@
             </Tab>
             <Tab fx:id="cataloguePiece" text="Catalogue Piéces">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3;">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3; -fx-background-color: white;">
                      <children>
                         <TableView fx:id="tablePiece" layoutX="2.0" layoutY="4.0" prefHeight="373.0" prefWidth="1293.0" stylesheets="@tableView.css">
                           <columns>
-                            <TableColumn fx:id="referenceRow" prefWidth="116.0" text="Réference" />
-                            <TableColumn fx:id="desRow" prefWidth="391.0" text="Désigniation" />
-                              <TableColumn fx:id="prixVenteRow" prefWidth="112.0" text="Prix Vente" />
-                              <TableColumn fx:id="prixAchatRow" prefWidth="123.0" text="Prix Achat" />
-                              <TableColumn fx:id="stockRow" prefWidth="123.0" text="Stock" />
-                              <TableColumn fx:id="totaleVenteRow" prefWidth="222.0" text="Totale Vente" />
-                              <TableColumn fx:id="totaleAchatRow" prefWidth="203.0" text="Totale Achat" />
+                            <TableColumn fx:id="referenceRow" editable="false" prefWidth="116.0" text="Réference" />
+                            <TableColumn fx:id="desRow" editable="false" prefWidth="391.0" text="Désigniation" />
+                              <TableColumn fx:id="prixVenteRow" editable="false" prefWidth="112.0" text="Prix Vente" />
+                              <TableColumn fx:id="prixAchatRow" editable="false" prefWidth="123.0" text="Prix Achat" />
+                              <TableColumn fx:id="stockRow" editable="false" prefWidth="123.0" text="Stock" />
+                              <TableColumn fx:id="totaleVenteRow" editable="false" prefWidth="148.0" text="Totale Vente" />
+                              <TableColumn fx:id="totaleAchatRow" editable="false" prefWidth="143.0" text="Totale Achat" />
+                              <TableColumn fx:id="benificeRow" editable="false" prefWidth="135.0" text="Benifice" />
                           </columns>
                         </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="nvPieceTab" text="Nouvelle Piéce">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #7400FF; -fx-border-width: 3;">
+                     <children>
+                        <ImageView fitHeight="363.0" fitWidth="467.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/nvPiece.png" />
+                           </image>
+                        </ImageView>
+                        <JFXTextField fx:id="refNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="32.0" prefHeight="25.0" prefWidth="391.0" promptText="Réference">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="desNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="100.0" prefHeight="25.0" prefWidth="391.0" promptText="Désigniation">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="paNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="168.0" prefHeight="25.0" prefWidth="391.0" promptText="Prix D'achat">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXTextField fx:id="pvNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="244.0" prefHeight="25.0" prefWidth="391.0" promptText="Prix De Vente">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXTextField>
+                        <Label layoutX="899.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="1273.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="ndNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="31.0" prefHeight="37.0" prefWidth="339.0" promptText="Nombre Des Piéces">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXTextField>
+                        <JFXButton fx:id="nvPieceVBtn" buttonType="RAISED" disable="true" layoutX="14.0" layoutY="319.0" prefHeight="35.0" prefWidth="468.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
+                           <font>
+                              <Font name="FontAwesome Regular" size="19.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </JFXButton>
                      </children>
                   </AnchorPane>
               </content>

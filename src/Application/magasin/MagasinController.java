@@ -123,19 +123,22 @@ public class MagasinController extends Controller implements Initializable {
     private TableColumn<Piece, String> desRow;
 
     @FXML
-    private TableColumn<Piece, Integer> prixVenteRow;
+    private TableColumn<Piece, Double> prixVenteRow;
 
     @FXML
-    private TableColumn<Piece, Integer> prixAchatRow;
+    private TableColumn<Piece, Double> prixAchatRow;
 
     @FXML
     private TableColumn<Piece, Integer> stockRow;
 
     @FXML
-    private TableColumn<Piece, Integer> totaleVenteRow;
+    private TableColumn<Piece, Double> totaleVenteRow;
 
     @FXML
-    private TableColumn<Piece, Integer> totaleAchatRow;
+    private TableColumn<Piece, Double> totaleAchatRow;
+
+    @FXML
+    private TableColumn<Piece, Double> benificeRow;
 
     @FXML
     private AnchorPane cataloguePieceBtn;
@@ -148,6 +151,28 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private Tab cataloguePiece;
+
+    @FXML
+    private Tab nvPieceTab;
+
+    @FXML
+    private JFXTextField refNvPiece;
+
+    @FXML
+    private JFXTextField desNvPiece;
+
+    @FXML
+    private JFXTextField paNvPiece;
+
+    @FXML
+    private JFXTextField pvNvPiece;
+
+    @FXML
+    private JFXTextField ndNvPiece;
+
+
+    @FXML
+    private JFXButton nvPieceVBtn;
 
 
     @FXML
@@ -258,9 +283,14 @@ public class MagasinController extends Controller implements Initializable {
         adrMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getAdresse().trim())));
         mtpMonCpt.textProperty().addListener((observable, oldValue, newValue) -> validerModification.setDisable(newValue.trim().equals(admin.getMot_de_passe().trim())));
         this.addNumeriqueListener(tlpMonCpt);
+        this.addNumeriqueListener(paNvPiece);
+        this.addNumeriqueListener(pvNvPiece);
+        this.addNumeriqueListener(ndNvPiece);
         this.addNumeriqueListener(nuTlp);
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
+        refNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || ndNvPiece.textProperty().isEmpty().get()));
+        ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
         ///////////////////////// Buttons Events ///////////////////////////////////////////////////////////////////////////////
         this.addHoverStyle(monCompteBtn);
         this.addHoverStyle(ajouteUtilisateurBtn);
@@ -275,14 +305,16 @@ public class MagasinController extends Controller implements Initializable {
         prenomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("prenom"));
         tlpRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("telephone"));
         adrRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("adresse"));
-
+        /////////////////////////Table Piece///////////////////////////////////////////////////////////////////////////////
         referenceRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("reference"));
         desRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("designiation"));
-        prixVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("prix_de_vente"));
-        prixAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("prix_de_achat"));
+        desRow.setCellFactory(WRAPPING_CELL_FACTORY);
+        prixVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("prix_de_vente"));
+        prixAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("prix_de_achat"));
         stockRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
-        totaleAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("factur_piece"));
-        totaleVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("benifice_piece"));
+        totaleAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("factur_piece"));
+        totaleVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("totaleVente_piece"));
+        benificeRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("benifice_piece"));
 
 
 
