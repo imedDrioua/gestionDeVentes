@@ -8,6 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,6 +35,12 @@ public class MagasinController extends Controller implements Initializable {
     Connection connection;
     PreparedStatement pr = null;
     String sql;
+    ////Données des pieces /////////////////////
+    ObservableList<Piece> piecesData;
+    FilteredList<Piece> listPieceFiltrer;
+    SortedList<Piece> sortedData ;
+    ////////////////////////////////////////////
+
     @FXML
     private AnchorPane infoBtn;
 
@@ -176,13 +184,24 @@ public class MagasinController extends Controller implements Initializable {
 
 
     @FXML
+    private JFXTextField recherchePieceRef;
+
+    @FXML
+    private JFXTextField rechPieceDes;
+
+    @FXML
+    private JFXTextField rechPiecePrix;
+
+
+
+
+    @FXML
     private void validerModification() throws SQLException {
         if(nomMonCpt.textProperty().isEmpty().get() || mtpMonCpt.textProperty().isEmpty().get()){
           transitionDesComposants(nomMonCpt);
           transitionDesComposants(monCompteBtn);
         }else {
             this.connection = BddConnection.getConnection();
-
             if (this.connection != null) {
              sql= "UPDATE admin SET nom = ?, mtp = ?, telephone = ?, adress = ?, prenom = ? WHERE ID = ?";
                 try  {
@@ -193,15 +212,19 @@ public class MagasinController extends Controller implements Initializable {
                     pr.setString(4, adrMonCpt.getText());
                     pr.setString(5, prenomMonCpt.getText());
                     pr.setInt(6,admin.getId());
-                    System.out.println(pr.executeUpdate());
-
+                   if( pr.executeUpdate() > 0 ) {
+                        admin.setNom(nomMonCpt.getText());
+                        admin.setMot_de_passe(mtpMonCpt.getText());
+                        admin.setTelephone(tlpMonCpt.getText());
+                        admin.setPrenom(prenomMonCpt.getText());
+                        admin.setAdresse( adrMonCpt.getText());
+                       this.updateUsers();
+                    };
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }finally {
                     pr.close();
                 }
-
-
             }
         }
 
@@ -267,15 +290,19 @@ public class MagasinController extends Controller implements Initializable {
                 exPiece.inccrementer(nd);
                 this.sql="UPDATE stock SET reference = ?, designiation = ?, prixVente = ?, prixAchat = ?, stockDisponible = ? WHERE ID = ?";
                 try {
+                    String des = desNvPiece.getText().trim().isEmpty() ? exPiece.getDesigniation() : desNvPiece.getText().trim().toUpperCase();
                     this.apply();
                     this.pr.setString(1, ref);
-                    this.pr.setString(2, exPiece.getDesigniation());
+                    this.pr.setString(2, des);
                     this.pr.setString(3, String.valueOf(exPiece.getPrix_de_vente()));
                     this.pr.setString(4, String.valueOf(exPiece.getPrix_de_achat()));
                     this.pr.setString(5, String.valueOf(exPiece.getStock_disponible()));
                     this.pr.setInt(6, exPiece.getId());
-                    System.out.println(this.pr.executeUpdate());
-                    tablePiece.refresh();
+                    if(this.pr.executeUpdate() >0){
+                        exPiece.setDesigniation(des);
+                        this.updatePieces();
+                    }
+
                 }catch (SQLException throwables){
                     throwables.printStackTrace();
                 }finally {
@@ -350,6 +377,47 @@ public class MagasinController extends Controller implements Initializable {
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
         refNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || ndNvPiece.textProperty().isEmpty().get()));
         ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
+        recherchePieceRef.textProperty().addListener((observable, oldValue, newValue) -> {
+            listPieceFiltrer.setPredicate(piece -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return piece.getReference().toLowerCase().contains(lowerCaseFilter); // Filter matches first name.
+
+            });
+        });
+        rechPieceDes.textProperty().addListener((observable, oldValue, newValue) -> {
+            listPieceFiltrer.setPredicate(piece -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return piece.getDesigniation().toLowerCase().contains(lowerCaseFilter); // Filter matches first name.
+
+            });
+        });
+        rechPiecePrix.textProperty().addListener((observable, oldValue, newValue) -> {
+            listPieceFiltrer.setPredicate(piece -> {
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                double prixRech = Double.parseDouble(newValue);
+
+                return piece.getPrix_de_vente() == prixRech; // Filter matches first name.
+
+            });
+        });
+
         ///////////////////////// Buttons Events ///////////////////////////////////////////////////////////////////////////////
         this.addHoverStyle(monCompteBtn);
         this.addHoverStyle(ajouteUtilisateurBtn);
@@ -389,14 +457,21 @@ public class MagasinController extends Controller implements Initializable {
         adrMonCpt.setText(this.admin.getAdresse());
         this.updateUsers();
         this.updatePieces();
+
+
     }
     public void updateUsers(){
         ObservableList<Utilisateur> adminsData = FXCollections.observableArrayList(this.magasin.getUtilisateurs());
         tableAdmin.setItems(adminsData);
+        tableAdmin.refresh();
     }
     private void updatePieces(){
-        ObservableList<Piece> piecesData = FXCollections.observableArrayList(stock.getPieces_disponible().values());
-        tablePiece.setItems(piecesData);
+        piecesData = FXCollections.observableArrayList(stock.getPieces_disponible().values());
+        listPieceFiltrer = new FilteredList<>(piecesData,p->true);
+        sortedData = new SortedList<>(listPieceFiltrer);
+        sortedData.comparatorProperty().bind(tablePiece.comparatorProperty());
+        tablePiece.setItems(sortedData);
+        tablePiece.refresh();
     }
 
     public void setAdmin(Utilisateur admin) {

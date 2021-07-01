@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="magasin" uuid="0feb7198-d6b3-4557-ab71-63d7bb3a07c5">
+    <data-source source="LOCAL" name="magasin [3]" uuid="884f4b43-60de-4598-bde4-e65ada0ed796">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\gestionDevente\src\magasin</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\gestionDeStock\magasin</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="magasin [2]" uuid="3dd8cbef-5ac0-4f4f-8a3f-670605c557a5">
+    <data-source source="LOCAL" name="magasin [4]" uuid="e2548197-aff9-4001-b65d-5863cb9c77d3">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\gestionDevente\magasin</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\gestionDeStock\src\magasin</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>

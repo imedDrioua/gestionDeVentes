@@ -102,15 +102,13 @@ public class LoginController extends Controller implements Initializable {
                     ((Stage)(btnConnecter.getScene().getWindow())).close();
                 }else{
                     System.out.println("failled");
-                    this.transitionDesComposants(txfMtp);
-                    this.transitionDesComposants(txfNomDeLutilisateur);
+                    transitionDesComposants(txfMtp);
+                    transitionDesComposants(txfNomDeLutilisateur);
                     plaqueErreur.setText("Utilisateur non trouvé");
 
                 }
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 throwables.printStackTrace();
-            } catch(IOException e){
-                e.printStackTrace();
             }
 
 
@@ -118,7 +116,7 @@ public class LoginController extends Controller implements Initializable {
     }
     private boolean auth(String nom , String mtp,ArrayList<Utilisateur> users){
         for (Utilisateur user : users){
-             if(user.auth(nom,mtp)==true) {
+             if(user.auth(nom, mtp)) {
                  this.admin=user;
                  return true;
              }
@@ -129,6 +127,7 @@ public class LoginController extends Controller implements Initializable {
     private void getAdminsId() throws SQLException {
         this.connection = BddConnection.getConnection();
         String idQuery = "SELECT MAX(ID) AS LAST FROM admin";
+        assert this.connection != null;
         PreparedStatement pr = this.connection.prepareStatement(idQuery);
         ResultSet rs = pr.executeQuery();
         int currentID = Integer.parseInt(rs.getString("LAST"));
@@ -139,6 +138,7 @@ public class LoginController extends Controller implements Initializable {
     private ArrayList<Utilisateur> getUtilisateurs() throws SQLException {
         this.connection = BddConnection.getConnection();
         String sqlQuery="SELECT * FROM admin";
+        assert this.connection != null;
         PreparedStatement pr = this.connection.prepareStatement(sqlQuery);
         ArrayList<Utilisateur> adminItems=new ArrayList<Utilisateur>();
         ResultSet rs = pr.executeQuery();
