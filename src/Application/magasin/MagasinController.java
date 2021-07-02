@@ -5,7 +5,6 @@ import Bdd.BddConnection;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
@@ -23,10 +22,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.text.DateFormat;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -258,6 +257,9 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private Label messageVente;
 
+    @FXML
+    private AnchorPane colormsg;
+
 
     @FXML
     private void validerModification() throws SQLException {
@@ -380,50 +382,55 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private void validerNvVente() throws ParseException, SQLException {
         messageVente.setText("");
-        if(quantityVente.textProperty().isEmpty().get() || montatnVente.textProperty().isEmpty().get() || refVente.textProperty().isEmpty().get()){
+        if(quantityVente.textProperty().isEmpty().get() || montatnVente.textProperty().isEmpty().get() || refVente.textProperty().isEmpty().get() ){
             transitionDesComposants(quantityVente);
             transitionDesComposants(refVente);
             transitionDesComposants(montatnVente);
             messageVente.setText("Veuillez remplir les champs ");
         }else {
-          //  Piece piecevendu= stock.getPieces_disponible().get(refVente.getText());
-            Piece piecevendu=piece_de_vente;
+
+            Piece piecevendu = piece_de_vente == null ? stock.getPieces_disponible().get(refVente.getText()) : piece_de_vente;
+             if (piecevendu != null){
             int quantity = Integer.parseInt(quantityVente.getText().trim());
-            if(quantity > piecevendu.getStock_disponible() )
-            {
+            if (quantity > piecevendu.getStock_disponible()) {
                 transitionDesComposants(quantityVente);
                 messageVente.setText("Quantité insuffisante");
-            }else{
+            } else {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String datestr = dtf.format(LocalDateTime.now());
                 Date date = formatter.parse(datestr);
                 double montant = Double.parseDouble(montatnVente.getText().trim());
                 double main = Double.parseDouble(mainVente.getText().trim());
-                Vente vente = new Vente(date,piecevendu,montant,quantity,main);
+                Vente vente = new Vente(date, piecevendu, montant, quantity, main);
                 piecevendu.decrementer(quantity);
                 this.updatePieces();
                 magasin.getCarnet_des_ventes().add(vente);
-                this.connection=BddConnection.getConnection();
-                if(this.connection!=null){
-                    this.sql="INSERT INTO vendre (reference,montant,date,exemplaire,mainOeuvre) VALUES (?,?,?,?,?)";
-                    try{
+                this.connection = BddConnection.getConnection();
+                if (this.connection != null) {
+                    this.sql = "INSERT INTO vendre (reference,montant,date,exemplaire,mainOeuvre) VALUES (?,?,?,?,?)";
+                    try {
                         this.apply();
-                        pr.setString(1,refVente.getText());
-                        pr.setDouble(2,montant);
+                        pr.setString(1, refVente.getText());
+                        pr.setDouble(2, montant);
                         pr.setString(3, datestr);
-                        pr.setInt(4,quantity);
-                        pr.setDouble(5,main);
-                        pr.executeUpdate();
-                        this.updateVentes();
-                        this.sql="UPDATE stock SET stockDisponible = ? WHERE reference = ?";
-                        this.apply();
-                        pr.setInt(1,piecevendu.getStock_disponible());
-                        pr.setString(2,piecevendu.getReference());
-                        pr.executeUpdate();
-                    }catch (SQLException throwables){
+                        pr.setInt(4, quantity);
+                        pr.setDouble(5, main);
+                       if( pr.executeUpdate() > 0){ //Insertion dans le carnet a été ressui
+                           this.updateVentes();
+                           this.sql = "UPDATE stock SET stockDisponible = ? WHERE reference = ?";
+                           this.apply();
+                           pr.setInt(1, piecevendu.getStock_disponible());
+                           pr.setString(2, piecevendu.getReference());
+                           if(pr.executeUpdate()  > 0){
+                               messageVente.setText("Vendu !");
+
+                           }
+                       }
+
+                    } catch (SQLException throwables) {
                         throwables.printStackTrace();
-                    }finally {
+                    } finally {
                         pr.close();
                     }
 
@@ -431,6 +438,10 @@ public class MagasinController extends Controller implements Initializable {
 
 
             }
+        }else {//Mal Refrence entrée
+                 messageVente.setText("Verifier la reference !");
+
+             }
 
         }
 
@@ -475,6 +486,12 @@ public class MagasinController extends Controller implements Initializable {
        openTab(nvPieceTab);
     }
 
+    @FXML
+    private void  nvVenteBtn(){
+        nouvelleVente();
+        piece_de_vente=null;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.closeTab(nouveauUtilisateurTab);
@@ -507,10 +524,10 @@ public class MagasinController extends Controller implements Initializable {
         refNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || ndNvPiece.textProperty().isEmpty().get()));
         montatnVente.textProperty().addListener((observable, oldValue, newValue) -> validerVenteBtn.setDisable(newValue.isEmpty() || quantityVente.textProperty().isEmpty().get()));
         quantityVente.textProperty().addListener((observable, oldValue, newValue) -> {
-            validerVenteBtn.setDisable(newValue.isEmpty() || montatnVente.textProperty().isEmpty().get());
+            validerVenteBtn.setDisable(newValue.isEmpty()|| montatnVente.textProperty().isEmpty().get() );
             if(piece_de_vente != null)
             {
-                montatnVente.setText(String.valueOf(Integer.parseInt(quantityVente.getText().trim().isEmpty() ?"0" : quantityVente.getText().trim()) * piece_de_vente.getPrix_de_vente()));
+                montatnVente.setText(String.valueOf(Integer.parseInt(quantityVente.getText().trim().isEmpty() ? "0" : quantityVente.getText().trim()) * piece_de_vente.getPrix_de_vente()));
             }
         });
         recherchePieceRef.textProperty().addListener((observable, oldValue, newValue) -> {

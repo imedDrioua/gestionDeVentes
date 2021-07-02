@@ -181,7 +181,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="nvVenteBtb" layoutX="422.0" layoutY="1.0" prefHeight="110.0" prefWidth="170.0">
+            <AnchorPane fx:id="nvVenteBtb" layoutX="422.0" layoutY="1.0" onMouseClicked="#nvVenteBtn" prefHeight="110.0" prefWidth="170.0">
                <children>
                   <FontAwesomeIcon fill="WHITE" iconName="CHECK" layoutX="59.0" layoutY="55.0" size="4em" text="" />
                   <Label layoutX="31.0" layoutY="74.14285659790039" text="Nouvelle Vente" textFill="WHITE">
