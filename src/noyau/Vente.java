@@ -12,14 +12,15 @@ public class Vente extends Transaction  {
     protected double montant=0;
     protected double benifice=0;
 
-    public Vente( Date date, Piece piece_vendu,double montant,int exmp) {
+    public Vente( Date date, Piece piece_vendu,double montant,int exmp,double main_oeuvre) {
         super(date);
         this.type = TypeDeTransaction.VENTE;
         this.piece_vendu = piece_vendu;
         this.des = piece_vendu.getDesigniation();
         this. nombre_exmp = exmp;
-        this.montant = nombre_exmp * piece_vendu.getPrix_de_vente() + main_oeuvre;
-        this.benifice = montant - (nombre_exmp * piece_vendu.getPrix_de_achat());
+        this.main_oeuvre = main_oeuvre;
+        this.montant = (nombre_exmp * piece_vendu.getPrix_de_vente() )+ main_oeuvre;
+        this.benifice = this.montant - (nombre_exmp * piece_vendu.getPrix_de_achat());
     }
 
     public String getPiece_vendu() {

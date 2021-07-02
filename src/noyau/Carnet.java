@@ -15,4 +15,8 @@ public class Carnet {
     public void retierDecarnet(Transaction transaction){
         this.transactions.remove(transaction);
     }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
 }

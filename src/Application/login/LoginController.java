@@ -27,6 +27,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.*;
 
 public class LoginController extends Controller implements Initializable {
@@ -105,7 +106,7 @@ public class LoginController extends Controller implements Initializable {
                     plaqueErreur.setText("Utilisateur non trouvé");
 
                 }
-            } catch (SQLException | IOException throwables) {
+            } catch (SQLException | IOException | ParseException throwables) {
                 throwables.printStackTrace();
             }
 

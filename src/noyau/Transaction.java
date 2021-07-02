@@ -1,5 +1,6 @@
 package noyau;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -7,10 +8,13 @@ public abstract class Transaction implements Comparable<Transaction>{
     protected String id="";
     protected TypeDeTransaction type;
     protected Date date;
+    protected String stringDate;
 
     public Transaction( Date date) {
-
         this.date = date;
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        stringDate= simpleDateFormat.format(date);
     }
 
     @Override
@@ -27,7 +31,10 @@ public abstract class Transaction implements Comparable<Transaction>{
     }
     @Override
     public int compareTo(Transaction transaction){
-        return date.compareTo(transaction.date);
+      return transaction.date.compareTo(date);
     }
 
+    public String getDate() {
+        return stringDate;
+    }
 }

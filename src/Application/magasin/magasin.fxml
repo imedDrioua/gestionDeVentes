@@ -87,6 +87,9 @@
                      <Cursor fx:constant="HAND" />
                   </cursor>
                </Label>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </AnchorPane>
             <ImageView fitHeight="112.0" fitWidth="213.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../../resources/stockPhoto.png" />
@@ -631,7 +634,7 @@
                         <TableColumn fx:id="quantityRowVente" editable="false" prefWidth="135.0" text="Qunatité" />
                         <TableColumn fx:id="prixVenteRowVente" editable="false" prefWidth="146.0" text="Montant" />
                         <TableColumn fx:id="mainRow" editable="false" prefWidth="147.0" text="Main d'oeuvre " />
-                        <TableColumn fx:id="BenificeRow" editable="false" prefWidth="128.0" text="Bénifice" />
+                        <TableColumn fx:id="benificeRowVente" editable="false" prefWidth="128.0" text="Bénifice" />
                         <TableColumn fx:id="dateRow" editable="false" prefWidth="340.0" text="Date" />
                      </columns>
                   </TableView>

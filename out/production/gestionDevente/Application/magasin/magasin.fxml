@@ -87,6 +87,9 @@
                      <Cursor fx:constant="HAND" />
                   </cursor>
                </Label>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </AnchorPane>
             <ImageView fitHeight="112.0" fitWidth="213.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
                <Image url="@../../resources/stockPhoto.png" />
@@ -174,6 +177,9 @@
                      </font>
                   </Label>
                </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </AnchorPane>
             <FontAwesomeIcon fill="WHITE" iconName="CHECK" layoutX="481.0" layoutY="53.0" size="4em" text="" />
             <Label layoutX="449.0" layoutY="76.0" text="Nouvelle Vente" textFill="WHITE">
@@ -625,10 +631,11 @@
                      <columns>
                         <TableColumn fx:id="referenceRowVente" editable="false" prefWidth="116.0" text="Réference" />
                         <TableColumn fx:id="desRowVente" editable="false" prefWidth="391.0" text="Désigniation" />
-                        <TableColumn fx:id="prixVenteRowVente" editable="false" prefWidth="112.0" text="Prix Vente" />
-                        <TableColumn fx:id="mainRow" editable="false" prefWidth="176.0" text="Main d'oeuvre " />
-                        <TableColumn fx:id="dateRow" editable="false" prefWidth="201.0" text="Date" />
-                        <TableColumn fx:id="BenificeRow" editable="false" prefWidth="295.0" text="Bénifice" />
+                        <TableColumn fx:id="quantityRowVente" editable="false" prefWidth="135.0" text="Qunatité" />
+                        <TableColumn fx:id="prixVenteRowVente" editable="false" prefWidth="146.0" text="Montant" />
+                        <TableColumn fx:id="mainRow" editable="false" prefWidth="147.0" text="Main d'oeuvre " />
+                        <TableColumn fx:id="benificeRowVente" editable="false" prefWidth="128.0" text="Bénifice" />
+                        <TableColumn fx:id="dateRow" editable="false" prefWidth="340.0" text="Date" />
                      </columns>
                   </TableView>
                </children>

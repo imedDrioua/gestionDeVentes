@@ -3,8 +3,6 @@ package Application.magasin;
 import Application.Controller;
 import Bdd.BddConnection;
 import com.jfoenix.controls.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -25,6 +23,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -41,6 +43,8 @@ public class MagasinController extends Controller implements Initializable {
     FilteredList<Piece> listPieceFiltrer;
     SortedList<Piece> sortedData ;
     ////////////////////////////////////////////
+    /////Données Ventes////////////////////////
+    ObservableList<Vente> ventes;
 
     @FXML
     private AnchorPane infoBtn;
@@ -218,7 +222,7 @@ public class MagasinController extends Controller implements Initializable {
     private TableColumn<Vente, String> dateRow;
 
     @FXML
-    private TableColumn<Vente, Double> BenificeRow;
+    private TableColumn<Vente, Double> benificeRowVente;
 
     @FXML
     private TableColumn<Vente, Integer> quantityRowVente;
@@ -489,19 +493,18 @@ public class MagasinController extends Controller implements Initializable {
         prixVenteRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("montant"));
         mainRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("main_oeuvre"));
         dateRow.setCellValueFactory(new PropertyValueFactory<Vente,String>("date"));
-        BenificeRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("benifice"));
-        quantityRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Integer>("nombre_exmp"));       
+        benificeRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("benifice"));
+        quantityRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Integer>("nombre_exmp"));
 
 
 
 
 
     }
-    public void setData() throws SQLException {
+    public void setData() throws SQLException, ParseException {
         this.admin= magasin.getUtilisateur();
         this.stock = magasin.getStock();
-        Carnet ventes = new Carnet(this.loadVente());
-        magasin.setCarnet_des_ventes(ventes);
+        magasin.setCarnet_des_ventes(this.loadVente());
         nomMonCpt.setText(this.admin.getNom());
         prenomMonCpt.setText(this.admin.getPrenom());
         tlpMonCpt.setText(this.admin.getTelephone());
@@ -509,7 +512,7 @@ public class MagasinController extends Controller implements Initializable {
         adrMonCpt.setText(this.admin.getAdresse());
         this.updateUsers();
         this.updatePieces();
-
+        this.updateVentes();
 
 
     }
@@ -525,6 +528,10 @@ public class MagasinController extends Controller implements Initializable {
         sortedData.comparatorProperty().bind(tablePiece.comparatorProperty());
         tablePiece.setItems(sortedData);
         tablePiece.refresh();
+    }
+    private void updateVentes(){
+         ventes = FXCollections.observableArrayList(magasin.getCarnet_des_ventes());
+         tableVente.setItems(ventes);
     }
 
     public void setAdmin(Utilisateur admin) {
@@ -548,15 +555,19 @@ public class MagasinController extends Controller implements Initializable {
             tabDeTravaille.getTabs().remove(tab);
         }
     }
-    private Set<Transaction> loadVente() throws SQLException {
+    private Set<Vente> loadVente() throws SQLException, ParseException {
         this.connection=BddConnection.getConnection();
-        Set<Transaction> ventes = new TreeSet<Transaction>();
+        Set<Vente> ventes = new TreeSet<Vente>();
         if (this.connection != null) {
             String sql="SELECT * FROM vendre";
             PreparedStatement pr = this.connection.prepareStatement(sql);
             ResultSet rs = pr.executeQuery();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             while (rs.next()){
-                Vente vente = new Vente(rs.getDate(3),stock.getPieces_disponible().get(rs.getString(1)), rs.getDouble(2),rs.getInt(5));
+                System.out.println(formatter.parse(rs.getString("date")));
+
+                Vente vente = new Vente(formatter.parse(rs.getString("date")), stock.getPieces_disponible().get(rs.getString(1)), rs.getDouble(2),rs.getInt(5),rs.getDouble(6));
+
                 ventes.add(vente);
             }
         }
