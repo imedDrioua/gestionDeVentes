@@ -17,16 +17,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import noyau.Magasin;
-import noyau.Piece;
-import noyau.Stock;
-import noyau.Utilisateur;
+import noyau.*;
+
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MagasinController extends Controller implements Initializable {
     Magasin magasin;
@@ -158,6 +159,9 @@ public class MagasinController extends Controller implements Initializable {
     private AnchorPane printBtn;
 
     @FXML
+    private AnchorPane carnetVenteBtn;
+
+    @FXML
     private Tab cataloguePiece;
 
     @FXML
@@ -191,6 +195,33 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private JFXTextField rechPiecePrix;
+
+    @FXML
+    private Tab mesVentesTab;
+
+    @FXML
+    private TableView<Vente> tableVente;
+
+    @FXML
+    private TableColumn<Vente, String> referenceRowVente;
+
+    @FXML
+    private TableColumn<Vente, String> desRowVente;
+
+    @FXML
+    private TableColumn<Vente, Double> prixVenteRowVente;
+
+    @FXML
+    private TableColumn<Vente, Double> mainRow;
+
+    @FXML
+    private TableColumn<Vente, String> dateRow;
+
+    @FXML
+    private TableColumn<Vente, Double> BenificeRow;
+
+    @FXML
+    private TableColumn<Vente, Integer> quantityRowVente;
 
 
 
@@ -346,6 +377,14 @@ public class MagasinController extends Controller implements Initializable {
         }else     tabDeTravaille.getSelectionModel().select(cataloguePiece);
     }
     @FXML
+    private void carnetVente(){
+        if(! tabDeTravaille.getTabs().contains(mesVentesTab)) {
+            tabDeTravaille.getTabs().add(mesVentesTab);
+            tabDeTravaille.getSelectionModel().select(mesVentesTab);
+        }else     tabDeTravaille.getSelectionModel().select(mesVentesTab);
+    }
+
+    @FXML
     private void nouvellePiece(){
         if(! tabDeTravaille.getTabs().contains(nvPieceTab)) {
             tabDeTravaille.getTabs().add(nvPieceTab);
@@ -360,6 +399,7 @@ public class MagasinController extends Controller implements Initializable {
         this.closeTab(catalogueAdminTab);
         this.closeTab(cataloguePiece);
         this.closeTab(nvPieceTab);
+        this.closeTab(mesVentesTab);
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
 
@@ -426,6 +466,7 @@ public class MagasinController extends Controller implements Initializable {
         this.addHoverStyle(cataloguePieceBtn);
         this.addHoverStyle(nvPieceBtn);
         this.addHoverStyle(printBtn);
+        this.addHoverStyle(carnetVenteBtn);
         /////////////////////////Table Admin//////////////////////////////////////////////////////////////////////////////
         idRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,Integer>("id"));
         nomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("nom"));
@@ -442,14 +483,25 @@ public class MagasinController extends Controller implements Initializable {
         totaleAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("factur_piece"));
         totaleVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("totaleVente_piece"));
         benificeRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("benifice_piece"));
+        ////////////////////////Table Ventes///////////////////////////////////////////////////////////////////////////////
+        referenceRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("piece_vendu"));
+        desRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("des"));
+        prixVenteRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("montant"));
+        mainRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("main_oeuvre"));
+        dateRow.setCellValueFactory(new PropertyValueFactory<Vente,String>("date"));
+        BenificeRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("benifice"));
+        quantityRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Integer>("nombre_exmp"));       
+
 
 
 
 
     }
-    public void setData(){
+    public void setData() throws SQLException {
         this.admin= magasin.getUtilisateur();
         this.stock = magasin.getStock();
+        Carnet ventes = new Carnet(this.loadVente());
+        magasin.setCarnet_des_ventes(ventes);
         nomMonCpt.setText(this.admin.getNom());
         prenomMonCpt.setText(this.admin.getPrenom());
         tlpMonCpt.setText(this.admin.getTelephone());
@@ -457,6 +509,7 @@ public class MagasinController extends Controller implements Initializable {
         adrMonCpt.setText(this.admin.getAdresse());
         this.updateUsers();
         this.updatePieces();
+
 
 
     }
@@ -494,6 +547,21 @@ public class MagasinController extends Controller implements Initializable {
         } else {
             tabDeTravaille.getTabs().remove(tab);
         }
+    }
+    private Set<Transaction> loadVente() throws SQLException {
+        this.connection=BddConnection.getConnection();
+        Set<Transaction> ventes = new TreeSet<Transaction>();
+        if (this.connection != null) {
+            String sql="SELECT * FROM vendre";
+            PreparedStatement pr = this.connection.prepareStatement(sql);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()){
+                Vente vente = new Vente(rs.getDate(3),stock.getPieces_disponible().get(rs.getString(1)), rs.getDouble(2),rs.getInt(5));
+                ventes.add(vente);
+            }
+        }
+
+         return  ventes;
     }
 
 }

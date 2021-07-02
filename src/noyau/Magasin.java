@@ -38,8 +38,13 @@ public class Magasin {
     public Stock getStock() {
         return stock;
     }
+    public Carnet getCarnet_des_ventes() {return carnet_des_ventes;}
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    public void setCarnet_des_ventes(Carnet carnet_des_ventes) {
+        this.carnet_des_ventes = carnet_des_ventes;
     }
 }

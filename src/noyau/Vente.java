@@ -3,27 +3,46 @@ package noyau;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Vente extends Transaction {
-    protected Personne client;
-    protected ArrayList<Piece> piece_vendu;
-    protected double prix_totale=0;
+public class Vente extends Transaction  {
 
+    protected Piece piece_vendu;
+    protected String des;
+    protected int  nombre_exmp;
+    protected double main_oeuvre=0;
+    protected double montant=0;
+    protected double benifice=0;
 
-    public Vente( Date date, Personne client, ArrayList<Piece> piece_vendu) {
+    public Vente( Date date, Piece piece_vendu,double montant,int exmp) {
         super(date);
         this.type = TypeDeTransaction.VENTE;
-        this.client = client;
         this.piece_vendu = piece_vendu;
-        calculerPrixTotale();
-
+        this.des = piece_vendu.getDesigniation();
+        this. nombre_exmp = exmp;
+        this.montant = nombre_exmp * piece_vendu.getPrix_de_vente() + main_oeuvre;
+        this.benifice = montant - (nombre_exmp * piece_vendu.getPrix_de_achat());
     }
 
-    public void ajouterPieceVendu(Piece piece){
-        this.piece_vendu.add(piece);
+    public String getPiece_vendu() {
+        return piece_vendu.getReference();
     }
-    protected void calculerPrixTotale(){
-        for(Piece piece : this.piece_vendu){
-            this.prix_totale =+ piece.getPrix_de_vente();
-        }
+
+    public int getNombre_exmp() {
+        return nombre_exmp;
+    }
+
+    public double getMain_oeuvre() {
+        return main_oeuvre;
+    }
+
+    public double getMontant() {
+        return montant;
+    }
+
+    public double getBenifice() {
+        return benifice;
+    }
+
+    public String getDes() {
+        return des;
     }
 }

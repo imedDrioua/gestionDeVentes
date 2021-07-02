@@ -19,10 +19,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import noyau.Magasin;
-import noyau.Piece;
-import noyau.Stock;
-import noyau.Utilisateur;
+import noyau.*;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -51,6 +49,7 @@ public class LoginController extends Controller implements Initializable {
 
     private Connection connection = null;
     private Utilisateur admin;
+
 
 
     @Override
@@ -85,7 +84,6 @@ public class LoginController extends Controller implements Initializable {
                     magasin.setUtilisateur(admin);
                     magasin.setUtilisateurs(adminItems);
                     Stock stock = new Stock(this.loadStock(),new HashSet<>());
-                    System.out.println(this.loadStock());
                     magasin.setStock(stock);
                     this.getAdminsId();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../magasin/magasin.fxml"));
@@ -175,6 +173,7 @@ public class LoginController extends Controller implements Initializable {
         }
         return pieceDisponible;
     }
+
 
 
 }
