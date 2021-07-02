@@ -181,12 +181,16 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <FontAwesomeIcon fill="WHITE" iconName="CHECK" layoutX="481.0" layoutY="53.0" size="4em" text="" />
-            <Label layoutX="449.0" layoutY="76.0" text="Nouvelle Vente" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Label>
+            <AnchorPane fx:id="nvVenteBtb" layoutX="422.0" layoutY="1.0" prefHeight="110.0" prefWidth="170.0">
+               <children>
+                  <FontAwesomeIcon fill="WHITE" iconName="CHECK" layoutX="59.0" layoutY="55.0" size="4em" text="" />
+                  <Label layoutX="31.0" layoutY="74.14285659790039" text="Nouvelle Vente" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
             <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="620.0" layoutY="55.0" size="4em" />
             <Label layoutX="603.0" layoutY="76.0" text="Les clients" textFill="WHITE">
                <font>
@@ -638,6 +642,67 @@
                         <TableColumn fx:id="dateRow" editable="false" prefWidth="340.0" text="Date" />
                      </columns>
                   </TableView>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="nvVenteTab" text="Nouvelle Vente">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #7400FF; -fx-border-width: 3;">
+               <children>
+                  <ImageView fitHeight="363.0" fitWidth="467.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../resources/nvPiece.png" />
+                     </image>
+                  </ImageView>
+                  <JFXTextField fx:id="refVente" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="32.0" prefHeight="25.0" prefWidth="335.0" promptText="Réference">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="desVente" alignment="CENTER" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="162.0" prefHeight="37.0" prefWidth="768.0" promptText="Désigniation">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="mainVente" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="100.0" prefHeight="37.0" prefWidth="335.0" promptText="Main d'oeuvre">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="montatnVente" focusColor="#7400ff" labelFloat="true" layoutX="497.0" layoutY="100.0" prefHeight="25.0" prefWidth="335.0" promptText="Montant">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label layoutX="848.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1273.0" layoutY="24.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="quantityVente" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="31.0" prefHeight="37.0" prefWidth="335.0" promptText="Quantité">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXButton fx:id="validerVenteBtn" buttonType="RAISED" disable="true" layoutX="788.0" layoutY="249.0" onAction="#validerNvPiece" prefHeight="35.0" prefWidth="186.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
+                     <font>
+                        <Font name="FontAwesome Regular" size="19.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <Label layoutX="848.0" layoutY="94.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </content>

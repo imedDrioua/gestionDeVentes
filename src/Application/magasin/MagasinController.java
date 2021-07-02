@@ -60,6 +60,9 @@ public class MagasinController extends Controller implements Initializable {
     private AnchorPane ajouteUtilisateurBtn;
 
     @FXML
+    private AnchorPane nvVenteBtb;
+
+    @FXML
     private Tab monCompteTab;
 
     @FXML
@@ -227,6 +230,27 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private TableColumn<Vente, Integer> quantityRowVente;
 
+    @FXML
+    private Tab nvVenteTab;
+
+    @FXML
+    private JFXTextField refVente;
+
+    @FXML
+    private JFXTextField quantityVente;
+
+    @FXML
+    private JFXTextField montatnVente ;
+
+    @FXML
+    private JFXTextField mainVente;
+
+    @FXML
+    private JFXTextField desVente;
+
+    @FXML
+    private JFXButton validerVenteBtn;
+
 
 
 
@@ -348,52 +372,43 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
+    private void openTab(Tab tab)
+    {
+        if(! tabDeTravaille.getTabs().contains(tab)) {
+            tabDeTravaille.getTabs().add(tab);
+            tabDeTravaille.getSelectionModel().select(tab);
+        }else tabDeTravaille.getSelectionModel().select(tab);
+    }
     @FXML
     private void monCompte(){
-        if(! tabDeTravaille.getTabs().contains(monCompteTab)) {
-            tabDeTravaille.getTabs().add(monCompteTab);
-            tabDeTravaille.getSelectionModel().select(monCompteTab);
-        }else tabDeTravaille.getSelectionModel().select(monCompteTab);
+       openTab(monCompteTab);
     }
     @FXML
     private void nouveauUtilisateur(){
-        if(! tabDeTravaille.getTabs().contains(nouveauUtilisateurTab)) {
-            tabDeTravaille.getTabs().add(nouveauUtilisateurTab);
-            tabDeTravaille.getSelectionModel().select(nouveauUtilisateurTab);
+      openTab(nouveauUtilisateurTab);
 
-        }else {
-            tabDeTravaille.getSelectionModel().select(nouveauUtilisateurTab);
-        }
 
     }
     @FXML
     private void catalogue(){
-        if(! tabDeTravaille.getTabs().contains(catalogueAdminTab)) {
-            tabDeTravaille.getTabs().add(catalogueAdminTab);
-            tabDeTravaille.getSelectionModel().select(catalogueAdminTab);
-        }else     tabDeTravaille.getSelectionModel().select(catalogueAdminTab);
+       openTab( catalogueAdminTab);
     }
     @FXML
     private void cataloguePiece(){
-        if(! tabDeTravaille.getTabs().contains(cataloguePiece)) {
-            tabDeTravaille.getTabs().add(cataloguePiece);
-            tabDeTravaille.getSelectionModel().select(cataloguePiece);
-        }else     tabDeTravaille.getSelectionModel().select(cataloguePiece);
+        openTab(cataloguePiece);
     }
     @FXML
     private void carnetVente(){
-        if(! tabDeTravaille.getTabs().contains(mesVentesTab)) {
-            tabDeTravaille.getTabs().add(mesVentesTab);
-            tabDeTravaille.getSelectionModel().select(mesVentesTab);
-        }else     tabDeTravaille.getSelectionModel().select(mesVentesTab);
+        openTab(mesVentesTab);
+    }
+    private void nouvelleVente(){
+
+        openTab(nvVenteTab);
     }
 
     @FXML
     private void nouvellePiece(){
-        if(! tabDeTravaille.getTabs().contains(nvPieceTab)) {
-            tabDeTravaille.getTabs().add(nvPieceTab);
-            tabDeTravaille.getSelectionModel().select(nvPieceTab);
-        }else     tabDeTravaille.getSelectionModel().select(nvPieceTab);
+       openTab(nvPieceTab);
     }
 
     @Override
@@ -404,6 +419,8 @@ public class MagasinController extends Controller implements Initializable {
         this.closeTab(cataloguePiece);
         this.closeTab(nvPieceTab);
         this.closeTab(mesVentesTab);
+        this.closeTab(nvVenteTab);
+
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
 
@@ -418,9 +435,11 @@ public class MagasinController extends Controller implements Initializable {
         this.addNumeriqueListener(ndNvPiece);
         this.addNumeriqueListener(nuTlp);
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
+        ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
         refNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || ndNvPiece.textProperty().isEmpty().get()));
-        ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
+        montatnVente.textProperty().addListener((observable, oldValue, newValue) -> validerVenteBtn.setDisable(newValue.isEmpty() || quantityVente.textProperty().isEmpty().get()));
+        quantityVente.textProperty().addListener((observable, oldValue, newValue) -> validerVenteBtn.setDisable(newValue.isEmpty() || montatnVente.textProperty().isEmpty().get()));
         recherchePieceRef.textProperty().addListener((observable, oldValue, newValue) -> {
             listPieceFiltrer.setPredicate(piece -> {
 
@@ -471,6 +490,7 @@ public class MagasinController extends Controller implements Initializable {
         this.addHoverStyle(nvPieceBtn);
         this.addHoverStyle(printBtn);
         this.addHoverStyle(carnetVenteBtn);
+        this.addHoverStyle(nvVenteBtb);
         /////////////////////////Table Admin//////////////////////////////////////////////////////////////////////////////
         idRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,Integer>("id"));
         nomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("nom"));
@@ -487,6 +507,23 @@ public class MagasinController extends Controller implements Initializable {
         totaleAchatRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("factur_piece"));
         totaleVenteRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("totaleVente_piece"));
         benificeRow.setCellValueFactory(new PropertyValueFactory<Piece,Double>("benifice_piece"));
+        tablePiece.setRowFactory( tv -> {
+            TableRow<Piece> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Piece piece = row.getItem();
+                    openTab(nvVenteTab);
+                    refVente.setText(piece.getReference());
+                    desVente.setText(piece.getDesigniation());
+                    quantityVente.setText("1");
+                    montatnVente.setText(String.valueOf(piece.getPrix_de_vente() * Double.valueOf(quantityVente.getText())));
+                    mainVente.setText("0");
+
+                }
+            });
+            return row ;
+        });
+
         ////////////////////////Table Ventes///////////////////////////////////////////////////////////////////////////////
         referenceRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("piece_vendu"));
         desRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("des"));
