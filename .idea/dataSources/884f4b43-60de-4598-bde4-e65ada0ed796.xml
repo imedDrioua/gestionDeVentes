@@ -1559,19 +1559,30 @@
     </column>
     <column id="545" parent="176" name="date">
       <Position>3</Position>
-      <DataType>TIME|0s</DataType>
+      <DataType>STRING|0s</DataType>
     </column>
     <column id="546" parent="176" name="ID">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <key id="547" parent="176">
+    <column id="547" parent="176" name="exemplaire">
+      <Position>5</Position>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>1</DefaultExpression>
+    </column>
+    <column id="548" parent="176" name="mainOeuvre">
+      <Position>6</Position>
+      <DataType>DOUBLE|0s</DataType>
+      <DefaultExpression>0</DefaultExpression>
+    </column>
+    <key id="549" parent="176">
       <ColNames>ID</ColNames>
       <OnConflict>replace</OnConflict>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="548" parent="176">
+    <foreign-key id="550" parent="176">
       <ColNames>reference</ColNames>
       <RefTableName>stock</RefTableName>
       <RefColNames>reference</RefColNames>

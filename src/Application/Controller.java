@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import noyau.Piece;
+import noyau.Vente;
 
 public class Controller {
 
@@ -68,6 +69,35 @@ public class Controller {
                 @Override
                 public TableCell<Piece, String> call(TableColumn<Piece, String> param) {
                     TableCell<Piece, String> tableCell = new TableCell<Piece, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            if (item == getItem()) return;
+                            super.updateItem(item, empty);
+                            if (item == null) {
+                                super.setText(null);
+                                super.setGraphic(null);
+                            } else {
+                                super.setText(null);
+                                Label l = new Label(item);
+                                l.setWrapText(true);
+                                VBox box = new VBox(l);
+                                l.heightProperty().addListener((observable, oldValue, newValue) -> {
+                                    box.setPrefHeight(newValue.doubleValue() + 7);
+                                    Platform.runLater(() -> this.getTableRow().requestLayout());
+                                });
+                                super.setGraphic(box);
+                            }
+                        }
+                    };
+                    return tableCell;
+                }
+            };
+    public static final Callback<TableColumn<Vente,String>, TableCell<Vente,String>> WRAPPING_CELL_FACTORY_VENTES =
+            new Callback<>() {
+
+                @Override
+                public TableCell<Vente, String> call(TableColumn<Vente, String> param) {
+                    TableCell<Vente, String> tableCell = new TableCell<Vente, String>() {
                         @Override
                         protected void updateItem(String item, boolean empty) {
                             if (item == getItem()) return;

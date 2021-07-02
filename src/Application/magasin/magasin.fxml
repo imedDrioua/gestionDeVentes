@@ -693,7 +693,7 @@
                         <Font size="16.0" />
                      </font>
                   </JFXTextField>
-                  <JFXButton fx:id="validerVenteBtn" buttonType="RAISED" disable="true" layoutX="788.0" layoutY="249.0" onAction="#validerNvPiece" prefHeight="35.0" prefWidth="186.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
+                  <JFXButton fx:id="validerVenteBtn" buttonType="RAISED" disable="true" layoutX="788.0" layoutY="249.0" onAction="#validerNvVente" prefHeight="35.0" prefWidth="186.0" style="-fx-background-color: #7400FF;" text="Valider" textFill="WHITE">
                      <font>
                         <Font name="FontAwesome Regular" size="19.0" />
                      </font>
@@ -704,6 +704,11 @@
                   <Label layoutX="848.0" layoutY="94.0" prefHeight="50.0" prefWidth="27.0" text="*" textFill="RED">
                      <font>
                         <Font size="29.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="messageVente" alignment="CENTER" layoutX="755.0" layoutY="320.0" prefHeight="50.0" prefWidth="252.0" textFill="#dd0c0c">
+                     <font>
+                        <Font size="15.0" />
                      </font>
                   </Label>
                </children>

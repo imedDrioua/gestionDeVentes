@@ -26,6 +26,9 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -43,6 +46,7 @@ public class MagasinController extends Controller implements Initializable {
     FilteredList<Piece> listPieceFiltrer;
     SortedList<Piece> sortedData ;
     ////////////////////////////////////////////
+    Piece piece_de_vente=null;
     /////Données Ventes////////////////////////
     ObservableList<Vente> ventes;
 
@@ -251,7 +255,8 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private JFXButton validerVenteBtn;
 
-
+    @FXML
+    private Label messageVente;
 
 
     @FXML
@@ -372,6 +377,64 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
+    @FXML
+    private void validerNvVente() throws ParseException, SQLException {
+        messageVente.setText("");
+        if(quantityVente.textProperty().isEmpty().get() || montatnVente.textProperty().isEmpty().get() || refVente.textProperty().isEmpty().get()){
+            transitionDesComposants(quantityVente);
+            transitionDesComposants(refVente);
+            transitionDesComposants(montatnVente);
+            messageVente.setText("Veuillez remplir les champs ");
+        }else {
+          //  Piece piecevendu= stock.getPieces_disponible().get(refVente.getText());
+            Piece piecevendu=piece_de_vente;
+            int quantity = Integer.parseInt(quantityVente.getText().trim());
+            if(quantity > piecevendu.getStock_disponible() )
+            {
+                transitionDesComposants(quantityVente);
+                messageVente.setText("Quantité insuffisante");
+            }else{
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String datestr = dtf.format(LocalDateTime.now());
+                Date date = formatter.parse(datestr);
+                double montant = Double.parseDouble(montatnVente.getText().trim());
+                double main = Double.parseDouble(mainVente.getText().trim());
+                Vente vente = new Vente(date,piecevendu,montant,quantity,main);
+                piecevendu.decrementer(quantity);
+                this.updatePieces();
+                magasin.getCarnet_des_ventes().add(vente);
+                this.connection=BddConnection.getConnection();
+                if(this.connection!=null){
+                    this.sql="INSERT INTO vendre (reference,montant,date,exemplaire,mainOeuvre) VALUES (?,?,?,?,?)";
+                    try{
+                        this.apply();
+                        pr.setString(1,refVente.getText());
+                        pr.setDouble(2,montant);
+                        pr.setString(3, datestr);
+                        pr.setInt(4,quantity);
+                        pr.setDouble(5,main);
+                        pr.executeUpdate();
+                        this.updateVentes();
+                        this.sql="UPDATE stock SET stockDisponible = ? WHERE reference = ?";
+                        this.apply();
+                        pr.setInt(1,piecevendu.getStock_disponible());
+                        pr.setString(2,piecevendu.getReference());
+                        pr.executeUpdate();
+                    }catch (SQLException throwables){
+                        throwables.printStackTrace();
+                    }finally {
+                        pr.close();
+                    }
+
+                }
+
+
+            }
+
+        }
+
+    }
     private void openTab(Tab tab)
     {
         if(! tabDeTravaille.getTabs().contains(tab)) {
@@ -404,6 +467,7 @@ public class MagasinController extends Controller implements Initializable {
     private void nouvelleVente(){
 
         openTab(nvVenteTab);
+        messageVente.setText("");
     }
 
     @FXML
@@ -434,12 +498,21 @@ public class MagasinController extends Controller implements Initializable {
         this.addNumeriqueListener(pvNvPiece);
         this.addNumeriqueListener(ndNvPiece);
         this.addNumeriqueListener(nuTlp);
+        this.addNumeriqueListener(montatnVente);
+        this.addNumeriqueListener(quantityVente);
+        this.addNumeriqueListener(mainVente);
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
         ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
         refNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || ndNvPiece.textProperty().isEmpty().get()));
         montatnVente.textProperty().addListener((observable, oldValue, newValue) -> validerVenteBtn.setDisable(newValue.isEmpty() || quantityVente.textProperty().isEmpty().get()));
-        quantityVente.textProperty().addListener((observable, oldValue, newValue) -> validerVenteBtn.setDisable(newValue.isEmpty() || montatnVente.textProperty().isEmpty().get()));
+        quantityVente.textProperty().addListener((observable, oldValue, newValue) -> {
+            validerVenteBtn.setDisable(newValue.isEmpty() || montatnVente.textProperty().isEmpty().get());
+            if(piece_de_vente != null)
+            {
+                montatnVente.setText(String.valueOf(Integer.parseInt(quantityVente.getText().trim().isEmpty() ?"0" : quantityVente.getText().trim()) * piece_de_vente.getPrix_de_vente()));
+            }
+        });
         recherchePieceRef.textProperty().addListener((observable, oldValue, newValue) -> {
             listPieceFiltrer.setPredicate(piece -> {
 
@@ -514,9 +587,10 @@ public class MagasinController extends Controller implements Initializable {
                     Piece piece = row.getItem();
                     openTab(nvVenteTab);
                     refVente.setText(piece.getReference());
+                    piece_de_vente = stock.getPieces_disponible().get(piece.getReference());
                     desVente.setText(piece.getDesigniation());
                     quantityVente.setText("1");
-                    montatnVente.setText(String.valueOf(piece.getPrix_de_vente() * Double.valueOf(quantityVente.getText())));
+                    montatnVente.setText(String.valueOf(piece.getPrix_de_vente() * Double.parseDouble(quantityVente.getText())));
                     mainVente.setText("0");
 
                 }
@@ -527,6 +601,7 @@ public class MagasinController extends Controller implements Initializable {
         ////////////////////////Table Ventes///////////////////////////////////////////////////////////////////////////////
         referenceRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("piece_vendu"));
         desRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("des"));
+        desRowVente.setCellFactory(WRAPPING_CELL_FACTORY_VENTES);
         prixVenteRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("montant"));
         mainRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("main_oeuvre"));
         dateRow.setCellValueFactory(new PropertyValueFactory<Vente,String>("date"));

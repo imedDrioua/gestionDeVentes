@@ -19,8 +19,8 @@ public class Vente extends Transaction  {
         this.des = piece_vendu.getDesigniation();
         this. nombre_exmp = exmp;
         this.main_oeuvre = main_oeuvre;
-        this.montant = (nombre_exmp * piece_vendu.getPrix_de_vente() )+ main_oeuvre;
-        this.benifice = this.montant - (nombre_exmp * piece_vendu.getPrix_de_achat());
+        this.montant =montant ;
+        this.benifice = (this.montant + main_oeuvre) - (nombre_exmp * piece_vendu.getPrix_de_achat());
     }
 
     public String getPiece_vendu() {
