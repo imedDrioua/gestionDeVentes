@@ -7,12 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import noyau.*;
 
@@ -28,10 +30,9 @@ import java.text.SimpleDateFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MagasinController extends Controller implements Initializable {
     Magasin magasin;
@@ -44,6 +45,7 @@ public class MagasinController extends Controller implements Initializable {
     ObservableList<Piece> piecesData;
     FilteredList<Piece> listPieceFiltrer;
     SortedList<Piece> sortedData ;
+    ObservableList<Piece> piecesManquantes;
     ////////////////////////////////////////////
     Piece piece_de_vente=null;
     /////Données Ventes////////////////////////
@@ -260,6 +262,93 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private AnchorPane colormsg;
 
+    @FXML
+    private JFXDatePicker dateVentdebut;
+
+    @FXML
+    private JFXDatePicker dateVentefin;
+
+    @FXML
+    private JFXButton filtrerVente;
+
+    @FXML
+    private JFXTextField totaleQuanti;
+
+    @FXML
+    private JFXTextField totaleMont;
+
+    @FXML
+    private JFXTextField totaleMain;
+
+    @FXML
+    private JFXTextField totaleBenifice;
+
+    @FXML
+    private Tab pieceManqueTab;
+
+    @FXML
+    private TableView<Piece> tablePieceManque;
+
+    @FXML
+    private TableColumn<Piece, String> refManqueRow;
+
+    @FXML
+    private TableColumn<Piece, String> desManqueRow;
+
+    @FXML
+    private TableColumn<Piece, Integer> stockManqueRow;
+
+    @FXML
+    void filtrerVente(ActionEvent event) throws ParseException {
+        int totaleQuant = 0;
+        double totaleMonta = 0;
+        double totaleMaind = 0;
+        double totaleBeni=0;
+
+        if( ! (dateVentefin.getValue() == null && dateVentdebut.getValue() == null) ) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            filtrerVente.setText(filtrerVente.getText().equals("Filtrer") ? "Annuler" : "Filtrer");
+
+            filtrerVente.setStyle(filtrerVente.getText().equals("Filtrer") ? "-fx-background-color :  #9ACD32" : "-fx-background-color : #7400FF");
+            if(filtrerVente.getText().equals("Annuler")) {
+                Date dateDebut = formatter.parse(dateVentdebut.getValue() == null ? "2019-12-30 00:00:00" : dateVentdebut.getValue().toString().concat(" 00:00:00"));
+                Date dateFin = formatter.parse(dateVentefin.getValue() == null ? "2025-12-30 00:00:00" : dateVentefin.getValue().toString().concat(" 00:00:00"));
+               if( dateFin.compareTo(dateDebut) >= 0)
+               {
+                   ArrayList<Vente> ventesFiltred = new ArrayList<>();
+                   for (Vente v : ventes) {
+                       if (v.getDateO().compareTo(dateDebut) >= 0 && v.getDateO().compareTo(dateFin) <= 0) {
+                           ventesFiltred.add(v);
+                           totaleQuant = totaleQuant + v.getNombre_exmp();
+                           totaleMonta = totaleMonta + v.getMontant();
+                           totaleMaind = totaleMaind + v.getMain_oeuvre();
+                           totaleBeni = totaleBeni + v.getBenifice();
+                       }
+                   }
+                   ObservableList<Vente> filtredVente = FXCollections.observableArrayList(ventesFiltred);
+                   tableVente.setItems(filtredVente);
+                   totaleQuanti.setText(String.valueOf(totaleQuant));
+                   totaleMont.setText(String.valueOf((int)totaleMonta));
+                   totaleMain.setText(String.valueOf((int)totaleMaind));
+                   totaleBenifice.setText(String.valueOf((int)totaleBeni));
+               }
+
+
+            }else{
+                totaleQuanti.setText("");
+                totaleMont.setText("");
+                totaleMain.setText("");
+                totaleBenifice.setText("");
+                tableVente.setItems(ventes);
+                dateVentefin.setValue(null);
+                dateVentdebut.setValue(null);
+
+            }
+        }
+
+    }
+
+
 
     @FXML
     private void validerModification() throws SQLException {
@@ -351,6 +440,7 @@ public class MagasinController extends Controller implements Initializable {
                     throwables.printStackTrace();
                 }finally {
                     pr.close();
+
                 }
             }else{
                 exPiece.inccrementer(nd);
@@ -360,9 +450,9 @@ public class MagasinController extends Controller implements Initializable {
                     this.apply();
                     this.pr.setString(1, ref);
                     this.pr.setString(2, des);
-                    this.pr.setString(3, String.valueOf(exPiece.getPrix_de_vente()));
-                    this.pr.setString(4, String.valueOf(exPiece.getPrix_de_achat()));
-                    this.pr.setString(5, String.valueOf(exPiece.getStock_disponible()));
+                    this.pr.setString(3, String.valueOf((int)exPiece.getPrix_de_vente()));
+                    this.pr.setString(4, String.valueOf((int)exPiece.getPrix_de_achat()));
+                    this.pr.setString(5, String.valueOf((int)exPiece.getStock_disponible()));
                     this.pr.setInt(6, exPiece.getId());
                     if(this.pr.executeUpdate() >0){
                         exPiece.setDesigniation(des);
@@ -375,6 +465,11 @@ public class MagasinController extends Controller implements Initializable {
                     pr.close();
                 }
             }
+            refNvPiece.setText("");
+            desNvPiece.setText("");
+            pvNvPiece.setText("");
+            paNvPiece.setText("");
+            ndNvPiece.setText("");
 
         }
 
@@ -490,6 +585,16 @@ public class MagasinController extends Controller implements Initializable {
     private void  nvVenteBtn(){
         nouvelleVente();
         piece_de_vente=null;
+        refVente.setText("");
+        desVente.setText("");
+        montatnVente.setText("");
+        quantityVente.setText("");
+        mainVente.setText("");
+    }
+    @FXML
+    void onManqueBtn(MouseEvent event) {
+        openTab(pieceManqueTab);
+
     }
 
     @Override
@@ -501,6 +606,7 @@ public class MagasinController extends Controller implements Initializable {
         this.closeTab(nvPieceTab);
         this.closeTab(mesVentesTab);
         this.closeTab(nvVenteTab);
+        this.closeTab(pieceManqueTab);
 
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
@@ -607,7 +713,7 @@ public class MagasinController extends Controller implements Initializable {
                     piece_de_vente = stock.getPieces_disponible().get(piece.getReference());
                     desVente.setText(piece.getDesigniation());
                     quantityVente.setText("1");
-                    montatnVente.setText(String.valueOf(piece.getPrix_de_vente() * Double.parseDouble(quantityVente.getText())));
+                    montatnVente.setText(String.valueOf((int)piece.getPrix_de_vente()));
                     mainVente.setText("0");
 
                 }
@@ -624,6 +730,11 @@ public class MagasinController extends Controller implements Initializable {
         dateRow.setCellValueFactory(new PropertyValueFactory<Vente,String>("date"));
         benificeRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("benifice"));
         quantityRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Integer>("nombre_exmp"));
+         /////////////////////Table Piee Manquantes///////////////////////////////////////////////////////////////////////
+        refManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("reference"));
+        desManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("designiation"));
+        stockManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -644,6 +755,7 @@ public class MagasinController extends Controller implements Initializable {
         this.updateVentes();
 
 
+
     }
     public void updateUsers(){
         ObservableList<Utilisateur> adminsData = FXCollections.observableArrayList(this.magasin.getUtilisateurs());
@@ -656,6 +768,7 @@ public class MagasinController extends Controller implements Initializable {
         sortedData = new SortedList<>(listPieceFiltrer);
         sortedData.comparatorProperty().bind(tablePiece.comparatorProperty());
         tablePiece.setItems(sortedData);
+        this.updatePieceManque();
         tablePiece.refresh();
     }
     private void updateVentes(){
@@ -702,6 +815,21 @@ public class MagasinController extends Controller implements Initializable {
         }
 
          return  ventes;
+    }
+    private ArrayList<Piece> checkStock(){
+        ArrayList<Piece> array=new ArrayList<>();
+        for (Piece p : piecesData){
+            if (p.getStock_disponible() <= 1) array.add(p);
+        }
+        return array;
+    }
+    private void updatePieceManque(){
+        piecesManquantes = FXCollections.observableArrayList(checkStock());
+        if(! piecesManquantes.isEmpty())
+        {
+            tablePieceManque.setItems(piecesManquantes);
+            tablePieceManque.refresh();
+        }
     }
 
 }

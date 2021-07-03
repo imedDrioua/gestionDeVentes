@@ -37,4 +37,8 @@ public abstract class Transaction implements Comparable<Transaction>{
     public String getDate() {
         return stringDate;
     }
+
+    public Date getDateO() {
+        return date;
+    }
 }

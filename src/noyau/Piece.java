@@ -93,9 +93,11 @@ public class Piece {
     }
     public void inccrementer(int value){
         this.stock_disponible =this.stock_disponible+ value;
+        this.calculer();
     }
     public void decrementer(int value){
         this.stock_disponible =this.stock_disponible - value;
+        this.calculer();
     }
     public void calculer(){
         this.calculerTotaleVente();

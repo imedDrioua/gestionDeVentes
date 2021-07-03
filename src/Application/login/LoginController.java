@@ -66,8 +66,8 @@ public class LoginController extends Controller implements Initializable {
         transition.setAutoReverse(false);
         transition.play();
         transition.setOnFinished(actionEvent -> logoLabel.setVisible(true));
-        txfMtp.setText("imed");
-        txfNomDeLutilisateur.setText("imed");
+        txfMtp.setText("amar");
+        txfNomDeLutilisateur.setText("Amar");
         connection = BddConnection.getConnection();
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -200,11 +201,21 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <JFXTextField focusColor="WHITE" labelFloat="true" layoutX="801.0" layoutY="29.0" prefHeight="25.0" prefWidth="185.0" promptText="Client" unFocusColor="WHITE">
+            <JFXDatePicker fx:id="dateVentdebut" defaultColor="WHITE" layoutX="715.0" layoutY="5.0" prefHeight="39.0" prefWidth="231.0" promptText="Date début" stylesheets="@datePicker.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXDatePicker>
+            <JFXDatePicker fx:id="dateVentefin" defaultColor="WHITE" layoutX="997.0" layoutY="5.0" prefHeight="39.0" prefWidth="231.0" promptText="Date fin" stylesheets="@datePicker.css">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXDatePicker>
+            <JFXButton fx:id="filtrerVente" buttonType="RAISED" layoutX="714.0" layoutY="61.0" onAction="#filtrerVente" prefHeight="38.0" prefWidth="480.0" style="-fx-background-color: #9ACD32;" text="Filtrer" textFill="WHITE">
                <font>
-                  <Font name="Arial Bold" size="18.0" />
+                  <Font name="FontAwesome Regular" size="18.0" />
                </font>
-            </JFXTextField>
+            </JFXButton>
          </AnchorPane>
       </Tab>
    </JFXTabPane>
@@ -222,7 +233,7 @@
                   <effect>
                      <DropShadow />
                   </effect>
-                  <HBox prefHeight="200.0" prefWidth="400.0">
+                  <HBox fx:id="manqueBtn" onMouseClicked="#onManqueBtn" prefHeight="200.0" prefWidth="400.0">
                      <ImageView fitHeight="184.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
                            <Insets right="5.0" />
@@ -272,6 +283,9 @@
                            </VBox>
                         </HBox>
                      </VBox>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </HBox>
                </AnchorPane>
                <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #ded8d8; -fx-background-radius: 15; -fx-border-radius: 15;">
@@ -568,13 +582,13 @@
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3; -fx-background-color: white;">
             <TableView fx:id="tablePiece" layoutX="2.0" layoutY="4.0" prefHeight="373.0" prefWidth="1293.0" stylesheets="@tableView.css">
                <columns>
-                  <TableColumn fx:id="referenceRow" editable="false" prefWidth="116.0" text="Réference" />
-                  <TableColumn fx:id="desRow" editable="false" prefWidth="391.0" text="Désigniation" />
+                  <TableColumn fx:id="referenceRow" editable="false" prefWidth="158.0" text="Réference" />
+                  <TableColumn fx:id="desRow" editable="false" prefWidth="349.0" text="Désigniation" />
                   <TableColumn fx:id="prixVenteRow" editable="false" prefWidth="112.0" text="Prix Vente" />
-                  <TableColumn fx:id="prixAchatRow" editable="false" prefWidth="123.0" text="Prix Achat" />
-                  <TableColumn fx:id="stockRow" editable="false" prefWidth="123.0" text="Stock" />
-                  <TableColumn fx:id="totaleVenteRow" editable="false" prefWidth="148.0" text="Totale Vente" />
-                  <TableColumn fx:id="totaleAchatRow" editable="false" prefWidth="143.0" text="Totale Achat" />
+                  <TableColumn fx:id="prixAchatRow" editable="false" prefWidth="141.0" text="Prix Achat" />
+                  <TableColumn fx:id="stockRow" editable="false" prefWidth="105.0" text="Stock" />
+                  <TableColumn fx:id="totaleVenteRow" editable="false" prefWidth="161.0" text="Totale Vente" />
+                  <TableColumn fx:id="totaleAchatRow" editable="false" prefWidth="130.0" text="Totale Achat" />
                   <TableColumn fx:id="benificeRow" editable="false" prefWidth="135.0" text="Benifice" />
                </columns>
             </TableView>
@@ -645,6 +659,26 @@
                         <TableColumn fx:id="dateRow" editable="false" prefWidth="340.0" text="Date" />
                      </columns>
                   </TableView>
+                  <JFXTextField fx:id="totaleQuanti" labelFloat="true" layoutX="506.0" layoutY="406.0" prefHeight="39.0" prefWidth="143.0" promptText="Totale">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="totaleMont" labelFloat="true" layoutX="649.0" layoutY="406.0" prefHeight="39.0" prefWidth="143.0" promptText="Totale">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="totaleMain" labelFloat="true" layoutX="792.0" layoutY="407.0" prefHeight="38.0" prefWidth="144.0" promptText="Totale">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="totaleBenifice" labelFloat="true" layoutX="936.0" layoutY="407.0" prefHeight="38.0" prefWidth="129.0" promptText="Totale">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </JFXTextField>
                </children>
             </AnchorPane>
          </content>
@@ -711,6 +745,21 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="pieceManqueTab" text="Pieces Manquantes">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3; -fx-background-color: white;">
+               <children>
+                  <TableView fx:id="tablePieceManque" layoutX="2.0" layoutY="4.0" prefHeight="373.0" prefWidth="1293.0" stylesheets="@tableView.css">
+                     <columns>
+                        <TableColumn fx:id="refManqueRow" editable="false" prefWidth="263.0" text="Réference" />
+                        <TableColumn fx:id="desManqueRow" editable="false" prefWidth="469.0" text="Désigniation" />
+                        <TableColumn fx:id="stockManqueRow" editable="false" prefWidth="343.0" text="Stock" />
+                     </columns>
+                  </TableView>
                </children>
             </AnchorPane>
          </content>
