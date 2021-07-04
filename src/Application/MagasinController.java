@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import noyau.*;
@@ -205,6 +206,13 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private JFXTextField ndNvPiece;
 
+    @FXML
+    private JFXTextField totalePiece;
+    @FXML
+    private JFXTextField factureTot;
+    @FXML
+    private JFXTextField benificeTot;
+
 
     @FXML
     private JFXButton nvPieceVBtn;
@@ -308,6 +316,8 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private TableColumn<Piece, Integer> stockManqueRow;
+    @FXML
+    private JFXCheckBox ecraserStock;
 
     @FXML
     void filtrerVente(ActionEvent event) throws ParseException {
@@ -430,12 +440,13 @@ public class MagasinController extends Controller implements Initializable {
             String ref=refNvPiece.getText().trim().toUpperCase();
             int nd=Integer.parseInt(ndNvPiece.getText().trim());
             Piece exPiece = this.stock.getPieces_disponible().get(ref);
+            int prixV=Integer.parseInt(pvNvPiece.getText().trim());
+            int prixA=Integer.parseInt(paNvPiece.getText().trim());
             if(exPiece == null){
                 String des=desNvPiece.getText().trim().toUpperCase();
-                int prixV=Integer.parseInt(pvNvPiece.getText().trim());
-                int prixA=Integer.parseInt(paNvPiece.getText().trim());
+
                 Piece nvPiece = new Piece(ref,des,prixV,prixA,nd,0);
-                this.stock.getPieces_disponible().put(ref,nvPiece);
+                this.stock.ajouterPieceAuStock(nvPiece);
                 this.sql="INSERT INTO stock(reference,designiation,prixVente,prixAchat,stockDisponible) VALUES(?,?,?,?,?)";
                 try{
                     this.apply();
@@ -454,19 +465,20 @@ public class MagasinController extends Controller implements Initializable {
 
                 }
             }else{
-                exPiece.inccrementer(nd);
-                this.sql="UPDATE stock SET reference = ?, designiation = ?, prixVente = ?, prixAchat = ?, stockDisponible = ? WHERE ID = ?";
+              if(ecraserStock.isSelected() ) exPiece.setStock_disponible(nd); else exPiece.inccrementer(nd)  ;
+                this.sql="UPDATE stock SET  designiation = ?, prixVente = ?, prixAchat = ?, stockDisponible = ? WHERE reference = ?";
                 try {
                     String des = desNvPiece.getText().trim().isEmpty() ? exPiece.getDesigniation() : desNvPiece.getText().trim().toUpperCase();
                     this.apply();
-                    this.pr.setString(1, ref);
-                    this.pr.setString(2, des);
-                    this.pr.setString(3, String.valueOf((int)exPiece.getPrix_de_vente()));
-                    this.pr.setString(4, String.valueOf((int)exPiece.getPrix_de_achat()));
-                    this.pr.setString(5, String.valueOf(exPiece.getStock_disponible()));
-                    this.pr.setInt(6, exPiece.getId());
+                    this.pr.setString(1, des);
+                    this.pr.setString(2, String.valueOf( prixV ));
+                    this.pr.setString(3, String.valueOf(prixA));
+                    this.pr.setString(4, String.valueOf(exPiece.getStock_disponible()));
+                    this.pr.setString(5, exPiece.getReference());
                     if(this.pr.executeUpdate() >0){
                         exPiece.setDesigniation(des);
+                        exPiece.setPrix_de_achat(prixA);
+                        exPiece.setPrix_de_vente(prixV);
                         this.updatePieces();
                     }
 
@@ -481,6 +493,7 @@ public class MagasinController extends Controller implements Initializable {
             pvNvPiece.setText("");
             paNvPiece.setText("");
             ndNvPiece.setText("");
+            ecraserStock.setDisable(true);
 
         }
 
@@ -498,9 +511,9 @@ public class MagasinController extends Controller implements Initializable {
             Piece piecevendu = piece_de_vente == null ? stock.getPieces_disponible().get(refVente.getText()) : piece_de_vente;
              if (piecevendu != null){
             int quantity = Integer.parseInt(quantityVente.getText().trim());
-            if (quantity > piecevendu.getStock_disponible()) {
+            if (quantity > piecevendu.getStock_disponible() || quantity <= 0) {
                 transitionDesComposants(quantityVente);
-                messageVente.setText("Quantité insuffisante");
+                messageVente.setText("Quantité invalide ");
             } else {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -589,7 +602,14 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private void nouvellePiece(){
-       openTab(nvPieceTab);
+        ecraserStock.setSelected(false);
+        ecraserStock.setDisable(true);
+        openTab(nvPieceTab);
+        refNvPiece.setText("");
+        desNvPiece.setText("");
+        pvNvPiece.setText("");
+        paNvPiece.setText("");
+        ndNvPiece.setText("");
     }
 
     @FXML
@@ -727,15 +747,29 @@ public class MagasinController extends Controller implements Initializable {
         tablePiece.setRowFactory( tv -> {
             TableRow<Piece> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton().equals(MouseButton.PRIMARY)) {
+                    closeTab(nvPieceTab);
                     Piece piece = row.getItem();
                     openTab(nvVenteTab);
                     refVente.setText(piece.getReference());
                     piece_de_vente = stock.getPieces_disponible().get(piece.getReference());
                     desVente.setText(piece.getDesigniation());
                     quantityVente.setText("1");
-                    montatnVente.setText(String.valueOf((int)piece.getPrix_de_vente()));
+                    montatnVente.setText(String.valueOf((int)piece.getPrix_de_vente() ));
                     mainVente.setText("0");
+
+                }
+                if (event.getClickCount() == 1 && (! row.isEmpty()) && event.getButton().equals(MouseButton.SECONDARY)) {
+
+                    Piece piece = row.getItem();
+                    openTab(nvPieceTab);
+                    ecraserStock.setDisable(false);
+                    ecraserStock.setSelected(false);
+                    refNvPiece.setText(piece.getReference());
+                    desNvPiece.setText(piece.getDesigniation());
+                    paNvPiece.setText(String.valueOf((int)piece.getPrix_de_achat()));
+                    pvNvPiece.setText(String.valueOf((int)piece.getPrix_de_vente()));
+                    ndNvPiece.setText("0");
 
                 }
             });
@@ -788,10 +822,12 @@ public class MagasinController extends Controller implements Initializable {
         tablePiece.setItems(sortedData);
         this.updatePieceManque();
         tablePiece.refresh();
+        this.upDateAcceuil();
     }
     private void updateVentes(){
          ventes = FXCollections.observableArrayList(magasin.getCarnet_des_ventes());
          tableVente.setItems(ventes);
+         this.upDateAcceuil();
     }
 
     public void setAdmin(Utilisateur admin) {
@@ -848,6 +884,11 @@ public class MagasinController extends Controller implements Initializable {
             tablePieceManque.setItems(piecesManquantes);
             tablePieceManque.refresh();
         }
+    }
+    private void upDateAcceuil (){
+        totalePiece.setText(String.valueOf(stock.getPieces_disponible().size()));
+        factureTot.setText(String.valueOf((int)stock.getFactur()));
+        benificeTot.setText(String.valueOf((int)stock.getBenifice()));
     }
 
 }

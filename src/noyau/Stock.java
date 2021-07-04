@@ -13,11 +13,13 @@ public class Stock {
     public Stock(Map<String,Piece> pieces_disponible, Set<Piece> piece_a_achtes) {
         this.pieces_disponible = pieces_disponible;
         this.piece_a_achtes = piece_a_achtes;
+        this.calculerBenifice();
+        this.calculerFactur();
 
     }
     public void calculerBenifice(){
        for (Piece piece : pieces_disponible.values()){
-           this.benifice =+ piece.getTotaleVente_piece();
+           this.benifice =+ piece.getBenifice_piece();
        }
     }
     public void calculerFactur(){
@@ -27,10 +29,13 @@ public class Stock {
     }
     public void ajouterPieceAuStock(Piece piece){
         Piece pieceEx=pieces_disponible.put(piece.getReference(),piece);
+
           if( pieceEx  != null ){
+              this.factur = this.factur - pieceEx.getFactur_piece();
               pieceEx.inccrementer(1);
 
         }
+        this.factur = this.factur + piece.getFactur_piece();
     }
     public void retirerPieceDeStock(Piece piece){
         pieces_disponible.remove(piece.getReference());
@@ -44,4 +49,11 @@ public class Stock {
         this.pieces_disponible = pieces_disponible;
     }
 
+    public double getFactur() {
+        return factur;
+    }
+
+    public double getBenifice() {
+        return benifice;
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTabPane?>
@@ -265,21 +266,40 @@
                               </Label>
                            </VBox>
                            <VBox prefHeight="123.0" prefWidth="148.0">
-                              <JFXTextField editable="false" prefWidth="146.0" promptText="0000000">
+                              <HBox>
                                  <VBox.margin>
                                     <Insets top="1.0" />
                                  </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField editable="false" layoutX="10.0" layoutY="10.0" promptText="0000000">
-                                 <VBox.margin>
-                                    <Insets top="4.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField editable="false" layoutX="10.0" layoutY="35.0" promptText="0000000">
-                                 <VBox.margin>
-                                    <Insets top="3.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
+                                 <children>
+                                    <JFXTextField fx:id="totalePiece" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000" />
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="11.0">
+                                 <children>
+                                    <JFXTextField fx:id="factureTot" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000" />
+                                    <Label prefHeight="26.0" prefWidth="29.0" text="DA">
+                                       <font>
+                                          <Font name="System Italic" size="17.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="2.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="11.0">
+                                 <children>
+                                    <JFXTextField fx:id="benificeTot" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000" />
+                                    <Label prefHeight="26.0" prefWidth="29.0" text="DA">
+                                       <font>
+                                          <Font name="System Italic" size="17.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox.margin>
+                                 <Insets right="2.0" />
+                              </HBox.margin>
                            </VBox>
                         </HBox>
                      </VBox>
@@ -629,7 +649,7 @@
                   <Font size="29.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="ndNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="31.0" prefHeight="37.0" prefWidth="335.0" promptText="Nombre Des Piéces">
+            <JFXTextField fx:id="ndNvPiece" focusColor="#7400ff" labelFloat="true" layoutX="926.0" layoutY="31.0" prefHeight="37.0" prefWidth="179.0" promptText="Nombre Des Piéces">
                <font>
                   <Font size="16.0" />
                </font>
@@ -642,6 +662,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
+            <JFXCheckBox fx:id="ecraserStock" layoutX="1123.0" layoutY="32.0" prefHeight="35.0" prefWidth="63.0" text="Ecraser" />
          </AnchorPane>
       </Tab>
       <Tab fx:id="mesVentesTab" text="Mes Ventes">
