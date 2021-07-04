@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="500.0" maxWidth="700.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.LoginController">
+   <children>
+      <JFXPasswordField fx:id="txfMtp" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="345.0" prefHeight="25.0" prefWidth="225.0" promptText="Mot De Passe" unFocusColor="BLACK" />
+      <Pane prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: #7400FF;">
+         <children>
+            <ImageView fx:id="voiture" fitHeight="354.0" fitWidth="350.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/piece.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="logoLabel" layoutX="5.0" layoutY="208.0" prefHeight="100.0" prefWidth="340.0" text="Piéces Auto Détachées" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS" size="31.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <ImageView fitHeight="206.0" fitWidth="350.0" layoutX="350.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/login.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="453.0" layoutY="197.0" prefHeight="39.0" prefWidth="185.0" text="ADMIN">
+         <font>
+            <Font name="System Bold" size="42.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txfNomDeLutilisateur" focusColor="#7400ff" labelFloat="true" layoutX="413.0" layoutY="278.0" prefHeight="25.0" prefWidth="225.0" promptText="Nom de l'utilisateur" unFocusColor="#070707">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton fx:id="btnConnecter" buttonType="RAISED" graphicTextGap="8.0" layoutX="412.0" layoutY="408.0" onAction="#login" prefHeight="25.0" prefWidth="225.0" ripplerFill="#7400ff" style="-fx-background-color: #7400AA;" text="Connecter" textAlignment="CENTER" textFill="WHITE" viewOrder="3.0">
+         <font>
+            <Font name="System Italic" size="17.0" />
+         </font>
+      </JFXButton>
+      <FontAwesomeIcon fill="#7400ff" iconName="USER" layoutX="383.0" layoutY="303.0" selectionEnd="1" selectionStart="1" size="2em" text="" wrappingWidth="28.428571701049805">
+         <font>
+            <Font name="System Bold" size="10.0" />
+         </font>
+      </FontAwesomeIcon>
+      <FontAwesomeIcon fill="#7400ff" iconName="LOCK" layoutX="386.0" layoutY="370.0" size="2em" />
+      <Label fx:id="plaqueErreur" alignment="CENTER" contentDisplay="CENTER" layoutX="422.0" layoutY="460.0" prefHeight="26.0" prefWidth="191.0" textAlignment="CENTER" textFill="#ff2b2b">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
