@@ -62,7 +62,7 @@ public class LoginController extends Controller implements Initializable {
         transition.setAutoReverse(false);
         transition.play();
         transition.setOnFinished(actionEvent -> logoLabel.setVisible(true));
-        txfMtp.setText("amar");
+        txfMtp.setText("iyadololo");
         txfNomDeLutilisateur.setText("Amar");
         connection = BddConnection.getConnection();
 
@@ -76,7 +76,6 @@ public class LoginController extends Controller implements Initializable {
             try {
                 ArrayList<Utilisateur> adminItems=this.getUtilisateurs();
                 if (auth(txfNomDeLutilisateur.getText(),txfMtp.getText(),adminItems)){
-                    System.out.println("connecté");
                     Magasin magasin=new Magasin();
                     magasin.setUtilisateur(admin);
                     magasin.setUtilisateurs(adminItems);
@@ -98,7 +97,6 @@ public class LoginController extends Controller implements Initializable {
                     stage.show();
                     ((Stage)(btnConnecter.getScene().getWindow())).close();
                 }else{
-                    System.out.println("failled");
                     transitionDesComposants(txfMtp);
                     transitionDesComposants(txfNomDeLutilisateur);
                     plaqueErreur.setText("Utilisateur non trouvé");

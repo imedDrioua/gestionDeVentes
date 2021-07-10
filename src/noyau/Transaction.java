@@ -12,7 +12,7 @@ public abstract class Transaction implements Comparable<Transaction>{
 
     public Transaction( Date date) {
         this.date = date;
-        String pattern = "yyyy-MM-dd";
+        String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         stringDate= simpleDateFormat.format(date);
     }

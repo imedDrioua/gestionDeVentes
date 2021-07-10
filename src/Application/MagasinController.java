@@ -19,6 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import noyau.*;
 
+
+
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +34,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 public class MagasinController extends Controller implements Initializable {
     Magasin magasin;
@@ -42,6 +43,7 @@ public class MagasinController extends Controller implements Initializable {
     Connection connection;
     PreparedStatement pr = null;
     String sql;
+    String langue = "FR";
     ////Données des pieces /////////////////////
     ObservableList<Piece> piecesData;
     FilteredList<Piece> listPieceFiltrer;
@@ -52,6 +54,8 @@ public class MagasinController extends Controller implements Initializable {
     /////Données Ventes////////////////////////
     ObservableList<Vente> ventes;
     JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
+    Vente ventAsupprimer = null;
+
 
     public void setSuggestions(JFXAutoCompletePopup<String> autoCompletePopup){
         this.autoCompletePopup = autoCompletePopup;
@@ -62,6 +66,36 @@ public class MagasinController extends Controller implements Initializable {
         });
 
     }
+    @FXML
+    private Label moncmpText;
+
+    @FXML
+    private Label nvAdminText;
+
+    @FXML
+    private Label catadminText;
+
+    @FXML
+    private Label catPieceText;
+
+    @FXML
+    private Label nvPieceText;
+
+    @FXML
+    private Label pieceManqText;
+
+    @FXML
+    private Label carnetVentText;
+
+
+    @FXML
+    private Label nvVenteText;
+
+    @FXML
+    private Label clientsText;
+
+    @FXML
+    private Tab magasinTab;
 
     @FXML
     private AnchorPane infoBtn;
@@ -208,6 +242,9 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private JFXTextField totalePiece;
+
+    @FXML
+    private JFXTextField venteTot;
     @FXML
     private JFXTextField factureTot;
     @FXML
@@ -276,6 +313,9 @@ public class MagasinController extends Controller implements Initializable {
     private JFXButton validerVenteBtn;
 
     @FXML
+    private JFXButton supprVente;
+
+    @FXML
     private Label messageVente;
 
     @FXML
@@ -327,9 +367,8 @@ public class MagasinController extends Controller implements Initializable {
         double totaleBeni=0;
 
         if( ! (dateVentefin.getValue() == null && dateVentdebut.getValue() == null) ) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             filtrerVente.setText(filtrerVente.getText().equals("Filtrer") ? "Annuler" : "Filtrer");
-
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             filtrerVente.setStyle(filtrerVente.getText().equals("Filtrer") ? "-fx-background-color :  #9ACD32" : "-fx-background-color : #7400FF");
             if(filtrerVente.getText().equals("Annuler")) {
                 Date dateDebut = formatter.parse(dateVentdebut.getValue() == null ? "2019-12-30 00:00:00" : dateVentdebut.getValue().toString().concat(" 00:00:00"));
@@ -343,7 +382,7 @@ public class MagasinController extends Controller implements Initializable {
                            totaleQuant = totaleQuant + v.getNombre_exmp();
                            totaleMonta = totaleMonta + v.getMontant();
                            totaleMaind = totaleMaind + v.getMain_oeuvre();
-                           totaleBeni = totaleBeni + v.getBenifice();
+                           totaleBeni = totaleBeni + v.getFacture();
                        }
                    }
                    ObservableList<Vente> filtredVente = FXCollections.observableArrayList(ventesFiltred);
@@ -363,6 +402,13 @@ public class MagasinController extends Controller implements Initializable {
                 tableVente.setItems(ventes);
                 dateVentefin.setValue(null);
                 dateVentdebut.setValue(null);
+
+            }
+        }else {
+            tableVente.setItems(ventes);
+            if(filtrerVente.getText().equals("Annuler") ){
+                filtrerVente.setText("Filtrer");
+                filtrerVente.setStyle("-fx-background-color :  #9ACD32" );
 
             }
         }
@@ -440,8 +486,8 @@ public class MagasinController extends Controller implements Initializable {
             String ref=refNvPiece.getText().trim().toUpperCase();
             int nd=Integer.parseInt(ndNvPiece.getText().trim());
             Piece exPiece = this.stock.getPieces_disponible().get(ref);
-            int prixV=Integer.parseInt(pvNvPiece.getText().trim());
-            int prixA=Integer.parseInt(paNvPiece.getText().trim());
+            int prixV=Integer.parseInt(pvNvPiece.getText().trim().isEmpty() ? "0" : pvNvPiece.getText().trim());
+            int prixA=Integer.parseInt(paNvPiece.getText().trim().isEmpty() ? "0" : paNvPiece.getText().trim());
             if(exPiece == null){
                 String des=desNvPiece.getText().trim().toUpperCase();
 
@@ -456,7 +502,7 @@ public class MagasinController extends Controller implements Initializable {
                     pr.setString(4,String.valueOf(prixA));
                     pr.setString(5,String.valueOf(nd));
                     pr.executeUpdate();
-
+                    autoCompletePopup.getSuggestions().add(ref);
                     this.updatePieces();
                 }catch (SQLException throwables){
                     throwables.printStackTrace();
@@ -498,6 +544,35 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
+
+    @FXML
+    private void undoVente() throws SQLException {
+        if(ventAsupprimer != null ){
+            ventAsupprimer.getPiece().inccrementer(ventAsupprimer.getNombre_exmp());
+            this.magasin.getCarnet_des_ventes().remove(ventAsupprimer);
+            this.sql = "DELETE FROM vendre WHERE reference = ? AND date = ?";
+            this.connection = BddConnection.getConnection();
+            if(this.connection != null){
+                this.apply();
+                pr.setString(1,ventAsupprimer.getPiece_vendu());
+                pr.setString(2,ventAsupprimer.getDate());
+                if( pr.executeUpdate() > 0){
+                    this.updateVentes();
+                    this.updatePieces();
+                    this.upDateAcceuil();
+                    this.updatePieceManque();
+                    supprVente.setDisable(true);
+                    this.sql = "UPDATE stock SET stockDisponible = ? WHERE reference = ?";
+                    this.apply();
+                    pr.setInt(1,  ventAsupprimer.getPiece().getStock_disponible());
+                    pr.setString(2,ventAsupprimer.getPiece_vendu());
+                    pr.executeUpdate();
+                    ventAsupprimer = null;
+                }
+                }
+        }
+        transitionDesComposants(supprVente);
+    }
     @FXML
     private void validerNvVente() throws ParseException, SQLException {
         messageVente.setText("");
@@ -507,11 +582,10 @@ public class MagasinController extends Controller implements Initializable {
             transitionDesComposants(montatnVente);
             messageVente.setText("Veuillez remplir les champs ");
         }else {
-
-            Piece piecevendu = piece_de_vente == null ? stock.getPieces_disponible().get(refVente.getText()) : piece_de_vente;
+             Piece piecevendu = piece_de_vente == null ? stock.getPieces_disponible().get(refVente.getText()) : piece_de_vente;
              if (piecevendu != null){
             int quantity = Integer.parseInt(quantityVente.getText().trim());
-            if (quantity > piecevendu.getStock_disponible() || quantity <= 0) {
+            if (quantity > piecevendu.getStock_disponible() ) {
                 transitionDesComposants(quantityVente);
                 messageVente.setText("Quantité invalide ");
             } else {
@@ -567,10 +641,14 @@ public class MagasinController extends Controller implements Initializable {
     }
     private void openTab(Tab tab)
     {
-        if(! tabDeTravaille.getTabs().contains(tab)) {
-            tabDeTravaille.getTabs().add(tab);
-            tabDeTravaille.getSelectionModel().select(tab);
-        }else tabDeTravaille.getSelectionModel().select(tab);
+        if(admin.getPrenom().equals("Amar") || tab.getText().equals("Catalogue Piéces"))
+        {
+            if(! tabDeTravaille.getTabs().contains(tab)) {
+                tabDeTravaille.getTabs().add(tab);
+                tabDeTravaille.getSelectionModel().select(tab);
+            }else tabDeTravaille.getSelectionModel().select(tab);
+        }
+
     }
     @FXML
     private void monCompte(){
@@ -655,6 +733,7 @@ public class MagasinController extends Controller implements Initializable {
         this.addNumeriqueListener(montatnVente);
         this.addNumeriqueListener(quantityVente);
         this.addNumeriqueListener(mainVente);
+
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
         ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
         nuMtp.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuNom.textProperty().isEmpty().get()));
@@ -663,8 +742,6 @@ public class MagasinController extends Controller implements Initializable {
             autoCompletePopup.filter(string -> string.toLowerCase().contains(refNvPiece.getText().toLowerCase()));
             if (autoCompletePopup.getFilteredSuggestions().isEmpty() || refNvPiece.getText().isEmpty()) {
                 autoCompletePopup.hide();
-                // if you remove textField.getText.isEmpty() when text field is empty it suggests all options
-                // so you can choose
             } else {
                 autoCompletePopup.show(refNvPiece);
             }
@@ -747,8 +824,9 @@ public class MagasinController extends Controller implements Initializable {
         tablePiece.setRowFactory( tv -> {
             TableRow<Piece> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton().equals(MouseButton.PRIMARY)) {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) && event.getButton().equals(MouseButton.PRIMARY) && admin.getPrenom().equals("Amar") ) {
                     closeTab(nvPieceTab);
+                    messageVente.setText("");
                     Piece piece = row.getItem();
                     openTab(nvVenteTab);
                     refVente.setText(piece.getReference());
@@ -759,7 +837,7 @@ public class MagasinController extends Controller implements Initializable {
                     mainVente.setText("0");
 
                 }
-                if (event.getClickCount() == 1 && (! row.isEmpty()) && event.getButton().equals(MouseButton.SECONDARY)) {
+                if (event.getClickCount() == 1 && (! row.isEmpty()) && event.getButton().equals(MouseButton.SECONDARY) && admin.getPrenom().equals("Amar")) {
 
                     Piece piece = row.getItem();
                     openTab(nvPieceTab);
@@ -775,6 +853,17 @@ public class MagasinController extends Controller implements Initializable {
             });
             return row ;
         });
+        tableVente.setRowFactory( tv -> {
+            TableRow<Vente> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                supprVente.setDisable(false);
+                // TODO Auto-generated method stub
+               ventAsupprimer = row.getItem();
+
+            });
+            return row;
+        });
+
 
         ////////////////////////Table Ventes///////////////////////////////////////////////////////////////////////////////
         referenceRowVente.setCellValueFactory(new PropertyValueFactory<Vente,String>("piece_vendu"));
@@ -783,7 +872,7 @@ public class MagasinController extends Controller implements Initializable {
         prixVenteRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("montant"));
         mainRow.setCellValueFactory(new PropertyValueFactory<Vente,Double>("main_oeuvre"));
         dateRow.setCellValueFactory(new PropertyValueFactory<Vente,String>("date"));
-        benificeRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("benifice"));
+        benificeRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Double>("facture"));
         quantityRowVente.setCellValueFactory(new PropertyValueFactory<Vente,Integer>("nombre_exmp"));
          /////////////////////Table Piee Manquantes///////////////////////////////////////////////////////////////////////
         refManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("reference"));
@@ -791,7 +880,7 @@ public class MagasinController extends Controller implements Initializable {
         stockManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+this.arab();
 
 
 
@@ -834,10 +923,12 @@ public class MagasinController extends Controller implements Initializable {
         this.admin = admin;
     }
     private void apply(){
-        try {
-            this.pr=this.connection.prepareStatement(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        if(admin.getPrenom().equals("Amar")) {
+            try {
+                this.pr = this.connection.prepareStatement(sql);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
     public void setMagasin(Magasin magasin) {
@@ -860,7 +951,7 @@ public class MagasinController extends Controller implements Initializable {
             ResultSet rs = pr.executeQuery();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             while (rs.next()){
-                System.out.println(formatter.parse(rs.getString("date")));
+
 
                 Vente vente = new Vente(formatter.parse(rs.getString("date")), stock.getPieces_disponible().get(rs.getString(1)), rs.getDouble(2),rs.getInt(5),rs.getDouble(6));
 
@@ -886,9 +977,36 @@ public class MagasinController extends Controller implements Initializable {
         }
     }
     private void upDateAcceuil (){
-        totalePiece.setText(String.valueOf(stock.getPieces_disponible().size()));
-        factureTot.setText(String.valueOf((int)stock.getFactur()));
-        benificeTot.setText(String.valueOf((int)stock.getBenifice()));
+        int nb=0;
+        for(Piece piece : piecesData){
+            nb = nb + piece.getStock_disponible();
+        }
+           stock.calculerFactur();
+        stock.calculerBenifice();
+        totalePiece.setText(String.valueOf(nb));
+        factureTot.setText(String.valueOf(stock.getFactur()));
+        benificeTot.setText(String.valueOf(stock.getBenifice()));
+        venteTot.setText(String.valueOf(stock.getVentes()));
+    }
+    private void arab(){
+        catalogueAdminTab.setText("المستخدمون");
+        mesVentesTab.setText("المبيعات");
+        monCompteTab.setText("حساب المستخدم");
+        nouveauUtilisateurTab.setText("اضافة مستخدم");
+        nvPieceTab.setText("اضافة قطعة");
+        nvVenteTab.setText("اضافة بيع");
+        pieceManqueTab.setText("قطع ناقصة");
+        cataloguePiece.setText("قطع المخزن");
+         moncmpText.setText("حسابي");
+         nvAdminText.setText("اضافةمستخدم");
+         catadminText.setText("المستخدمون");
+         catPieceText.setText("قطع المخزن");
+         nvPieceText.setText("اضافة قطعة");
+         pieceManqText.setText("قطع ناقصة");
+         carnetVentText.setText("دفتر المبيعات");
+         nvVenteText.setText("اضافة بيع");
+         clientsText.setText("العملاء");
+         magasinTab.setText("المتجر");
     }
 
 }

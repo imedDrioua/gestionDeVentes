@@ -10,7 +10,7 @@ public class Vente extends Transaction  {
     protected int  nombre_exmp;
     protected double main_oeuvre=0;
     protected double montant=0;
-    protected double benifice=0;
+    protected double facture=0;
 
     public Vente( Date date, Piece piece_vendu,double montant,int exmp,double main_oeuvre) {
         super(date);
@@ -20,11 +20,14 @@ public class Vente extends Transaction  {
         this. nombre_exmp = exmp;
         this.main_oeuvre = main_oeuvre;
         this.montant =montant ;
-        this.benifice = (this.montant + main_oeuvre) - (nombre_exmp * piece_vendu.getPrix_de_achat());
+        this.facture = nombre_exmp * piece_vendu.getPrix_de_achat();
     }
 
     public String getPiece_vendu() {
         return piece_vendu.getReference();
+    }
+    public Piece getPiece(){
+        return this.piece_vendu;
     }
 
     public int getNombre_exmp() {
@@ -39,8 +42,8 @@ public class Vente extends Transaction  {
         return montant;
     }
 
-    public double getBenifice() {
-        return benifice;
+    public double getFacture() {
+        return facture;
     }
 
     public String getDes() {

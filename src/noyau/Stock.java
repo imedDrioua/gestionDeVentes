@@ -9,6 +9,7 @@ public class Stock {
     private Set<Piece> piece_a_achtes;
     private double factur=0;
     private double benifice=0;
+    private double ventes =0;
 
     public Stock(Map<String,Piece> pieces_disponible, Set<Piece> piece_a_achtes) {
         this.pieces_disponible = pieces_disponible;
@@ -18,13 +19,18 @@ public class Stock {
 
     }
     public void calculerBenifice(){
+        this.benifice=0;
        for (Piece piece : pieces_disponible.values()){
-           this.benifice =+ piece.getBenifice_piece();
+           this.benifice =this.benifice + piece.getBenifice_piece();
        }
     }
     public void calculerFactur(){
+        this.factur =0;
+        this.ventes=0;
         for (Piece piece : pieces_disponible.values()){
-            this.factur =+ piece.getFactur_piece();
+            this.factur =this.factur + piece.getFactur_piece();
+            this.ventes = this.ventes + piece.getTotaleVente_piece();
+
         }
     }
     public void ajouterPieceAuStock(Piece piece){
@@ -55,5 +61,9 @@ public class Stock {
 
     public double getBenifice() {
         return benifice;
+    }
+
+    public double getVentes() {
+        return ventes;
     }
 }

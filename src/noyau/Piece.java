@@ -29,9 +29,11 @@ public class Piece {
     }
     private void calculerTotaleVente(){
         this.totaleVente_piece = prix_de_vente * stock_disponible;
+
     }
     private void calculerBenifice(){
         this.benifice_piece = totaleVente_piece - factur_piece;
+
     }
     private  void calculerFactur(){
         this.factur_piece = prix_de_achat * stock_disponible;
@@ -54,13 +56,17 @@ public class Piece {
         this.designiation = designiation;
     }
     public void setPrix_de_vente(double prix_de_vente) {
-        this.prix_de_vente = prix_de_vente;
+        this.prix_de_vente=prix_de_vente;
+       this.calculer();
     }
     public void setPrix_de_achat(double prix_de_achat) {
+
         this.prix_de_achat = prix_de_achat;
+        this.calculer();
     }
     public void setStock_disponible(int stock_disponible) {
         this.stock_disponible = stock_disponible;
+        this.calculer();
     }
     public String getReference() {
         return reference;

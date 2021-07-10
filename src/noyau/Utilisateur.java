@@ -17,7 +17,7 @@ public class Utilisateur extends Personne implements Comparable< Utilisateur>{
        }
 
        public boolean auth(String nomP,String mtpP){
-              return (nomP.equals(this.nom) && mtpP.equals(this.mot_de_passe));
+              return (nomP.equals(this.prenom) && mtpP.equals(this.mot_de_passe));
        }
 
        @Override

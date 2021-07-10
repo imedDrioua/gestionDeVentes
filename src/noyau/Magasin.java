@@ -47,4 +47,8 @@ public class Magasin {
     public void setCarnet_des_ventes(Set<Vente> carnet_des_ventes) {
         this.carnet_des_ventes = carnet_des_ventes;
     }
+
+    public Utilisateur getAdmin() {
+        return admin;
+    }
 }
