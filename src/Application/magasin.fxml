@@ -20,11 +20,22 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.MagasinController">
-   <AnchorPane layoutX="1030.0" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: #7400FF;" />
+   <AnchorPane layoutX="1030.0" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: #7400FF;">
+      <children>
+         <Label fx:id="deconnect" alignment="CENTER" layoutX="-1.0" layoutY="2.0" onMouseClicked="#deconnecter" prefHeight="50.0" prefWidth="270.0" text="Déconnexion" textFill="WHITE">
+            <font>
+               <Font name="Times New Roman" size="22.0" />
+            </font>
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </Label>
+      </children></AnchorPane>
    <JFXTabPane layoutY="50.0" prefHeight="150.0" prefWidth="1300.0" style="-fx-background-color: #7400FF;" stylesheets="@magasinTabPane.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.topAnchor="53.0">
       <Tab text="Accueil">
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;">
@@ -64,7 +75,7 @@
                </Label>
                <FontAwesomeIcon fill="WHITE" iconName="QUESTION" layoutX="66.0" layoutY="57.0" size="4em" />
             </AnchorPane>
-            <AnchorPane fx:id="infoBtn" layoutX="702.0" layoutY="1.0" onMouseClicked="#catalogue" prefHeight="110.0" prefWidth="160.0">
+            <AnchorPane fx:id="manqueBtn" layoutX="702.0" layoutY="1.0" onMouseClicked="#catalogue" prefHeight="110.0" prefWidth="160.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -107,7 +118,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="printBtn" layoutX="507.0" layoutY="1.0" prefHeight="110.0" prefWidth="160.0">
+            <AnchorPane fx:id="printBtn" layoutX="507.0" layoutY="1.0" onKeyTyped="#catalogue" onMouseClicked="#onManqueBtn" prefHeight="110.0" prefWidth="160.0">
                <FontAwesomeIcon fill="WHITE" iconName="WARNING" layoutX="62.0" layoutY="57.0" size="4em" />
                <Label fx:id="pieceManqText" layoutX="22.0" layoutY="75.0" text="Pièce Manquantes" textFill="WHITE">
                   <font>
@@ -242,7 +253,7 @@
                   <effect>
                      <DropShadow />
                   </effect>
-                  <HBox fx:id="manqueBtn" onMouseClicked="#onManqueBtn" prefHeight="200.0" prefWidth="400.0">
+                  <HBox prefHeight="200.0" prefWidth="400.0">
                      <ImageView fitHeight="184.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
                            <Insets right="5.0" />
@@ -337,7 +348,7 @@
                         </HBox>
                      </VBox>
                      <cursor>
-                        <Cursor fx:constant="HAND" />
+                        <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </HBox>
                </AnchorPane>
@@ -819,9 +830,34 @@
                         <TableColumn fx:id="stockManqueRow" editable="false" prefWidth="343.0" text="Stock" />
                      </columns>
                   </TableView>
+                  <JFXButton buttonType="RAISED" layoutX="1161.0" layoutY="377.0" onAction="#envoyerEmail" prefHeight="38.0" prefWidth="134.0" ripplerFill="#5e32c7" style="-fx-background-color: black;" text="Envoyer" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Times New Roman" size="21.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <Label fx:id="envoyerEmail" alignment="CENTER" layoutX="1177.0" layoutY="415.0" prefHeight="28.0" prefWidth="103.0" text="Envoyé" textAlignment="CENTER" textFill="#37d725">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </content>
       </Tab>
    </JFXTabPane>
+   <AnchorPane prefHeight="52.0" prefWidth="538.0" style="-fx-background-color: #7400FF;">
+      <children>
+         <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="24.0" layoutY="43.0" size="3em" text="" wrappingWidth="36.71428680419922" />
+         <Label fx:id="userName" layoutX="87.0" layoutY="2.0" prefHeight="50.0" prefWidth="451.0" textFill="WHITE">
+            <font>
+               <Font name="Times New Roman Italic" size="18.0" />
+            </font>
+         </Label>
+         <Line endX="3.000030517578125" endY="-24.0" fill="WHITE" layoutX="75.0" layoutY="25.0" startX="3.000030517578125" startY="27.0" stroke="WHITE" strokeWidth="2.0" />
+         <Circle fill="#41ff1f" layoutX="62.0" layoutY="12.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
+      </children>
+   </AnchorPane>
 </AnchorPane>

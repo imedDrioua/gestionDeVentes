@@ -11,5 +11,8 @@
     <orderEntry type="library" name="fontawesomefx-8.1" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.32.3.2" level="project" />
     <orderEntry type="library" name="jfoenix-9.0.10" level="project" />
+    <orderEntry type="library" name="activation-jaf1.1.1" level="project" />
+    <orderEntry type="library" name="java-mail-1.4.4" level="project" />
+    <orderEntry type="library" name="itextpdf-5.5.9" level="project" />
   </component>
 </module>

@@ -1,7 +1,10 @@
 package Application;
 
-import Application.Controller;
 import Bdd.BddConnection;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,16 +14,28 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import noyau.*;
 
 
-
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,6 +43,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -55,7 +71,41 @@ public class MagasinController extends Controller implements Initializable {
     ObservableList<Vente> ventes;
     JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
     Vente ventAsupprimer = null;
+    ////////////Mail////////////////////////////////////////////////////////////
+    String to = "driouaammar@gmail.com";
+    String from = "driouaimed@gmail.com";
+    String host = "smtp.gmail.com";
+    Properties properties = System.getProperties();
+    SmtpAuthenticator auth= new SmtpAuthenticator();
+    Session session = Session.getDefaultInstance(properties,auth);
+    ////////////////FILE GENERATORS////////////////////////////////
+    Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, new BaseColor(0, 0, 0));
+    Font bfBold13 = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLDITALIC, new BaseColor(0, 0, 0));
+    Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN, 12);
+    Rectangle pagesize = new Rectangle(700, 800);
+    Document document = new Document(pagesize, 36f, 72f, 80f, 180f);
 
+
+
+    Paragraph titre =  new Paragraph("Les Pièces Manquantes",bfBold13);
+
+    Paragraph paragraph = new Paragraph("");
+    Paragraph gap = new Paragraph("                                                         " +
+            "                                                                                              " +
+            "                            " +
+            "                  " +
+            "               " +
+            "             " +
+            "                                                                                              " +
+            "                                                                                               " +
+            "                                                                                         " +
+            "");
+
+    DecimalFormat df = new DecimalFormat("0.00");
+    //specify column widths
+    float[] columnWidths = {1.5f, 2f, 5f, 2f};
+    //create PDF table with the given widths
+    PdfPTable table = new PdfPTable(columnWidths);
 
     public void setSuggestions(JFXAutoCompletePopup<String> autoCompletePopup){
         this.autoCompletePopup = autoCompletePopup;
@@ -70,6 +120,9 @@ public class MagasinController extends Controller implements Initializable {
     private Label moncmpText;
 
     @FXML
+    private Label userName;
+
+    @FXML
     private Label nvAdminText;
 
     @FXML
@@ -80,6 +133,13 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private Label nvPieceText;
+
+    @FXML
+    private Label deconnect;
+    @FXML
+    private Label  envoyerEmail;
+
+
 
     @FXML
     private Label pieceManqText;
@@ -97,8 +157,7 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private Tab magasinTab;
 
-    @FXML
-    private AnchorPane infoBtn;
+
 
 
     @FXML
@@ -315,6 +374,7 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private JFXButton supprVente;
 
+
     @FXML
     private Label messageVente;
 
@@ -357,10 +417,17 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private TableColumn<Piece, Integer> stockManqueRow;
     @FXML
-    private JFXCheckBox ecraserStock;
+    private void envoyerEmail() throws FileNotFoundException, DocumentException {
+        Thread t1 = new Thread(new Upload("driouaimed@gmail.com","pièce.pdf",true,piecesManquantes));
+        t1.start();
+    }
+
 
     @FXML
-    void filtrerVente(ActionEvent event) throws ParseException {
+    private JFXCheckBox ecraserStock;
+    ////////Traitements des Operations /////////////////////////////////////////////////////////////////////////////////
+    @FXML
+    void filtrerVente() throws ParseException {
         int totaleQuant = 0;
         double totaleMonta = 0;
         double totaleMaind = 0;
@@ -414,9 +481,6 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
-
-
-
     @FXML
     private void validerModification() throws SQLException {
         if(nomMonCpt.textProperty().isEmpty().get() || mtpMonCpt.textProperty().isEmpty().get()){
@@ -544,7 +608,6 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
-
     @FXML
     private void undoVente() throws SQLException {
         if(ventAsupprimer != null ){
@@ -639,8 +702,8 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
-    private void openTab(Tab tab)
-    {
+    /////////Gestion des composants FXML//////////////////////////////////////////////////////////////////////////////////
+    private void openTab(Tab tab) {
         if(admin.getPrenom().equals("Amar") || tab.getText().equals("Catalogue Piéces"))
         {
             if(! tabDeTravaille.getTabs().contains(tab)) {
@@ -677,7 +740,6 @@ public class MagasinController extends Controller implements Initializable {
         openTab(nvVenteTab);
         messageVente.setText("");
     }
-
     @FXML
     private void nouvellePiece(){
         ecraserStock.setSelected(false);
@@ -689,7 +751,6 @@ public class MagasinController extends Controller implements Initializable {
         paNvPiece.setText("");
         ndNvPiece.setText("");
     }
-
     @FXML
     private void  nvVenteBtn(){
         nouvelleVente();
@@ -705,6 +766,7 @@ public class MagasinController extends Controller implements Initializable {
         openTab(pieceManqueTab);
 
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -733,6 +795,7 @@ public class MagasinController extends Controller implements Initializable {
         this.addNumeriqueListener(montatnVente);
         this.addNumeriqueListener(quantityVente);
         this.addNumeriqueListener(mainVente);
+
 
         nuNom.textProperty().addListener((observable, oldValue, newValue) -> nuBtn.setDisable(newValue.isEmpty() || nuMtp.textProperty().isEmpty().get()));
         ndNvPiece.textProperty().addListener((observable, oldValue, newValue) -> nvPieceVBtn.setDisable(newValue.isEmpty() || refNvPiece.textProperty().isEmpty().get()));
@@ -798,7 +861,7 @@ public class MagasinController extends Controller implements Initializable {
         ///////////////////////// Buttons Events ///////////////////////////////////////////////////////////////////////////////
         this.addHoverStyle(monCompteBtn);
         this.addHoverStyle(ajouteUtilisateurBtn);
-        this.addHoverStyle(infoBtn);
+
         this.addHoverStyle(aboutBtn);
         this.addHoverStyle(cataloguePieceBtn);
         this.addHoverStyle(nvPieceBtn);
@@ -880,12 +943,12 @@ public class MagasinController extends Controller implements Initializable {
         stockManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-this.arab();
+
 
 
 
     }
-    public void setData() throws SQLException, ParseException {
+    public void setData() throws SQLException, ParseException, FileNotFoundException, DocumentException {
         this.admin= magasin.getUtilisateur();
         this.stock = magasin.getStock();
         magasin.setCarnet_des_ventes(this.loadVente());
@@ -897,6 +960,14 @@ this.arab();
         this.updateUsers();
         this.updatePieces();
         this.updateVentes();
+        this.userName.setText(this.admin.getNom().toUpperCase() + " " + this.admin.getPrenom().toUpperCase());
+        envoyerEmail.setText("");
+        properties.setProperty("mail.smtp.host",host);
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.setProperty("mail.smtp.auth","true");
+        Thread t1 = new Thread(new Upload("driouaimed@gmail.com","magasin",false,piecesManquantes));
+        t1.start();
+
     }
     public void updateUsers(){
         ObservableList<Utilisateur> adminsData = FXCollections.observableArrayList(this.magasin.getUtilisateurs());
@@ -918,7 +989,6 @@ this.arab();
          tableVente.setItems(ventes);
          this.upDateAcceuil();
     }
-
     public void setAdmin(Utilisateur admin) {
         this.admin = admin;
     }
@@ -926,11 +996,16 @@ this.arab();
         if(admin.getPrenom().equals("Amar")) {
             try {
                 this.pr = this.connection.prepareStatement(sql);
+                Thread copy = new Thread(new Copy());
+                copy.start();
+
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
         }
     }
+
     public void setMagasin(Magasin magasin) {
         this.magasin = magasin;
     }
@@ -988,7 +1063,22 @@ this.arab();
         benificeTot.setText(String.valueOf(stock.getBenifice()));
         venteTot.setText(String.valueOf(stock.getVentes()));
     }
-    private void arab(){
+    @FXML
+    private void deconnecter() throws IOException {
+        this.magasin.setUtilisateur(null);
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Gestion de Vente ");
+        stage.show();
+       Stage main=(Stage) deconnect.getScene().getWindow();
+       main.close();
+
+    }
+   /*private void arab(){
         catalogueAdminTab.setText("المستخدمون");
         mesVentesTab.setText("المبيعات");
         monCompteTab.setText("حساب المستخدم");
@@ -1007,6 +1097,6 @@ this.arab();
          nvVenteText.setText("اضافة بيع");
          clientsText.setText("العملاء");
          magasinTab.setText("المتجر");
-    }
+    }*/
 
 }

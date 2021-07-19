@@ -1,6 +1,7 @@
 package Application;
 
 import Bdd.BddConnection;
+import com.itextpdf.text.DocumentException;
 import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -71,7 +72,7 @@ public class LoginController extends Controller implements Initializable {
 
 
     @FXML
-    private void login() throws SQLException {
+    private void login() {
         if(this.connection != null){
             try {
                 ArrayList<Utilisateur> adminItems=this.getUtilisateurs();
@@ -102,7 +103,7 @@ public class LoginController extends Controller implements Initializable {
                     plaqueErreur.setText("Utilisateur non trouvé");
 
                 }
-            } catch (SQLException | IOException | ParseException throwables) {
+            } catch (SQLException | IOException | ParseException | DocumentException throwables) {
                 throwables.printStackTrace();
             }
 
@@ -135,7 +136,7 @@ public class LoginController extends Controller implements Initializable {
         String sqlQuery="SELECT * FROM admin";
         assert this.connection != null;
         PreparedStatement pr = this.connection.prepareStatement(sqlQuery);
-        ArrayList<Utilisateur> adminItems=new ArrayList<Utilisateur>();
+        ArrayList<Utilisateur> adminItems=new ArrayList<>();
         ResultSet rs = pr.executeQuery();
         while (rs.next()){
             String nom = rs.getString("nom");
@@ -153,7 +154,7 @@ public class LoginController extends Controller implements Initializable {
 
     }
     private Map<String, Piece> loadStock( JFXAutoCompletePopup<String> autoCompletePopup) throws SQLException {
-        Map<String , Piece> pieceDisponible=new HashMap<String,Piece>();
+        Map<String , Piece> pieceDisponible=new HashMap<>();
         String sql="SELECT * FROM stock";
         PreparedStatement pr = this.connection.prepareStatement(sql);
         ResultSet rs = pr.executeQuery();
