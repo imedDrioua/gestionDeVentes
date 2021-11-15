@@ -27,7 +27,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Application.MagasinController">
    <AnchorPane layoutX="1030.0" prefHeight="50.0" prefWidth="270.0" style="-fx-background-color: #7400FF;">
       <children>
-         <Label fx:id="deconnect" alignment="CENTER" layoutX="-1.0" layoutY="2.0" onMouseClicked="#deconnecter" prefHeight="50.0" prefWidth="270.0" text="Déconnexion" textFill="WHITE">
+         <Label fx:id="deconnect" alignment="CENTER" layoutX="-1.0" layoutY="2.0" onMouseClicked="#deconnecter" prefHeight="56.0" prefWidth="270.0" text="Déconnexion" textFill="WHITE">
             <font>
                <Font name="Times New Roman" size="22.0" />
             </font>
@@ -118,9 +118,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="printBtn" layoutX="507.0" layoutY="1.0" onKeyTyped="#catalogue" onMouseClicked="#onManqueBtn" prefHeight="110.0" prefWidth="160.0">
-               <FontAwesomeIcon fill="WHITE" iconName="WARNING" layoutX="62.0" layoutY="57.0" size="4em" />
-               <Label fx:id="pieceManqText" layoutX="22.0" layoutY="75.0" text="Pièce Manquantes" textFill="WHITE">
+            <AnchorPane fx:id="printBtn" layoutX="508.0" layoutY="1.0" onKeyTyped="#catalogue" onMouseClicked="#onManqueBtn" prefHeight="110.0" prefWidth="160.0">
+               <FontAwesomeIcon fill="WHITE" iconName="WARNING" layoutX="54.0" layoutY="57.0" size="4em" />
+               <Label fx:id="pieceManqText" layoutX="14.0" layoutY="75.0" text="Pièce Manquantes" textFill="WHITE">
                   <font>
                      <Font name="System Bold" size="15.0" />
                   </font>
@@ -238,69 +238,118 @@
             </JFXButton>
          </AnchorPane>
       </Tab>
+      <Tab text="Comptabilité">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: white;">
+               <children>
+                  <AnchorPane fx:id="carnetChargeBtn" layoutX="8.0" layoutY="1.0" minHeight="0.0" onMouseClicked="#carnetCharge" prefHeight="110.0" prefWidth="170.0">
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="MONEY" layoutX="58.0" layoutY="55.0" size="4em" wrappingWidth="26.714284896850586" />
+                        <Label fx:id="carnetVentText1" layoutX="17.0" layoutY="74.14285659790039" text="Carnet des charges" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+                  <AnchorPane fx:id="nvChargeBtn" layoutX="172.0" layoutY="1.0" onMouseClicked="#nvChargeBtn" prefHeight="110.0" prefWidth="170.0">
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="CHECK" layoutX="59.0" layoutY="55.0" size="4em" text="" />
+                        <Label fx:id="nvVenteText1" layoutX="31.0" layoutY="74.14285659790039" text="Nouvelle Charge" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+                  <JFXDatePicker fx:id="dateDcharge" defaultColor="WHITE" layoutX="730.0" layoutY="11.0" prefHeight="39.0" prefWidth="231.0" promptText="Date début" stylesheets="@datePicker.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXDatePicker>
+                  <JFXDatePicker fx:id="dateFcharge" defaultColor="WHITE" layoutX="998.0" layoutY="13.0" prefHeight="39.0" prefWidth="231.0" promptText="Date fin" stylesheets="@datePicker.css">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXDatePicker>
+                  <JFXButton fx:id="filtrerChBtn" buttonType="RAISED" layoutX="729.0" layoutY="63.0" onAction="#filterCharges" prefHeight="38.0" prefWidth="493.0" style="-fx-background-color: #9ACD32;" text="Filtrer" textFill="WHITE">
+                     <font>
+                        <Font name="FontAwesome Regular" size="18.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
    </JFXTabPane>
    <JFXTabPane fx:id="tabDeTravaille" layoutY="203.0" prefHeight="496.0" prefWidth="1300.0" stylesheets="@workSpace.css" tabClosingPolicy="ALL_TABS">
       <Tab fx:id="magasinTab" closable="false" text="Magasin">
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="431.0" prefWidth="1300.0" style="-fx-border-width: 3; -fx-border-color: #7400FF;">
-            <FlowPane layoutX="3.0" prefHeight="430.0" prefWidth="1300.0" prefWrapLength="100.0">
+            <FlowPane prefHeight="430.0" prefWidth="1300.0" prefWrapLength="100.0">
                <padding>
-                  <Insets bottom="5.0" left="25.0" top="10.0" />
+                  <Insets bottom="5.0" left="40.0" top="10.0" />
                </padding>
-               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: wheat; -fx-background-radius: 15;">
+               <AnchorPane prefHeight="154.0" prefWidth="593.0" style="-fx-background-color: wheat; -fx-background-radius: 15;">
                   <FlowPane.margin>
                      <Insets bottom="15.0" right="15.0" />
                   </FlowPane.margin>
                   <effect>
                      <DropShadow />
                   </effect>
-                  <HBox prefHeight="200.0" prefWidth="400.0">
+                  <HBox prefHeight="199.0" prefWidth="604.0">
                      <ImageView fitHeight="184.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
                            <Insets right="5.0" />
                         </HBox.margin>
                         <Image url="@../resources/stock.png" />
                      </ImageView>
-                     <VBox prefHeight="200.0" prefWidth="228.0">
+                     <VBox prefHeight="199.0" prefWidth="430.0">
                         <Label prefHeight="74.0" prefWidth="222.0" text="Stock">
                            <font>
-                              <Font name="System Bold" size="45.0" />
+                              <Font name="Times New Roman Bold" size="37.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="123.0" prefWidth="200.0">
+                        <HBox prefHeight="136.0" prefWidth="273.0">
                            <VBox>
                               <Label prefHeight="30.0" prefWidth="79.0" text="Piéces">
                                  <font>
-                                    <Font size="20.0" />
+                                    <Font name="Times New Roman" size="20.0" />
                                  </font>
                               </Label>
                               <Label prefHeight="29.0" prefWidth="74.0" text="Facture">
                                  <font>
-                                    <Font size="19.0" />
+                                    <Font name="Times New Roman" size="20.0" />
                                  </font>
                               </Label>
                               <Label prefHeight="30.0" prefWidth="72.0" text="Ventes">
                                  <font>
-                                    <Font size="20.0" />
+                                    <Font name="Times New Roman" size="20.0" />
                                  </font>
                               </Label>
                               <Label layoutX="10.0" layoutY="69.0" prefHeight="30.0" prefWidth="72.0" text="Bénifice">
                                  <font>
-                                    <Font size="20.0" />
+                                    <Font name="Times New Roman" size="20.0" />
                                  </font>
                               </Label>
                            </VBox>
-                           <VBox prefHeight="123.0" prefWidth="148.0">
+                           <VBox prefHeight="136.0" prefWidth="334.0">
                               <HBox>
                                  <VBox.margin>
                                     <Insets top="1.0" />
                                  </VBox.margin>
                                  <children>
-                                    <JFXTextField fx:id="totalePiece" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000" />
+                                    <JFXTextField fx:id="totalePiece" editable="false" prefHeight="31.0" prefWidth="329.0" promptText="0000000" />
                                  </children>
                               </HBox>
                               <HBox layoutX="10.0" layoutY="11.0">
                                  <children>
-                                    <JFXTextField fx:id="factureTot" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000" />
+                                    <JFXTextField fx:id="factureTot" editable="false" prefHeight="31.0" prefWidth="296.0" promptText="0000000" />
                                     <Label prefHeight="26.0" prefWidth="29.0" text="DA">
                                        <font>
                                           <Font name="System Italic" size="17.0" />
@@ -316,7 +365,7 @@
                               </HBox>
                               <HBox layoutX="10.0" layoutY="11.0">
                                  <children>
-                                    <JFXTextField fx:id="venteTot" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000">
+                                    <JFXTextField fx:id="venteTot" editable="false" prefHeight="31.0" prefWidth="296.0" promptText="0000000">
                                        <HBox.margin>
                                           <Insets top="2.0" />
                                        </HBox.margin></JFXTextField>
@@ -329,7 +378,7 @@
                               </HBox>
                               <HBox layoutX="10.0" layoutY="64.0">
                                  <children>
-                                    <JFXTextField fx:id="benificeTot" editable="false" prefHeight="25.0" prefWidth="124.0" promptText="0000000">
+                                    <JFXTextField fx:id="benificeTot" editable="false" prefHeight="31.0" prefWidth="297.0" promptText="0000000">
                                        <HBox.margin>
                                           <Insets top="3.0" />
                                        </HBox.margin>
@@ -352,14 +401,14 @@
                      </cursor>
                   </HBox>
                </AnchorPane>
-               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #ded8d8; -fx-background-radius: 15; -fx-border-radius: 15;">
+               <AnchorPane prefHeight="200.0" prefWidth="428.0" style="-fx-background-color: #ded8d8; -fx-background-radius: 15; -fx-border-radius: 15;">
                   <FlowPane.margin>
                      <Insets bottom="15.0" right="15.0" />
                   </FlowPane.margin>
                   <effect>
                      <DropShadow />
                   </effect>
-                  <HBox prefHeight="198.0" prefWidth="402.0">
+                  <HBox prefHeight="198.0" prefWidth="612.0">
                      <ImageView fitHeight="156.0" fitWidth="270.0" pickOnBounds="true" preserveRatio="true">
                         <HBox.margin>
                            <Insets left="4.0" right="5.0" top="4.0" />
@@ -369,20 +418,20 @@
                      <VBox>
                         <Label prefHeight="74.0" prefWidth="202.0" text="Ventes">
                            <font>
-                              <Font name="System Bold" size="48.0" />
+                              <Font name="Times New Roman Bold" size="37.0" />
                            </font>
                         </Label>
                         <HBox>
-                           <Label prefHeight="56.0" prefWidth="155.0" text="Nombre Des Ventes">
+                           <Label prefHeight="26.0" prefWidth="155.0" text="Nombre De Ventes">
                               <font>
-                                 <Font size="17.0" />
+                                 <Font name="Times New Roman" size="16.0" />
                               </font>
                               <HBox.margin>
                                  <Insets left="5.0" />
                               </HBox.margin>
                            </Label>
                         </HBox>
-                        <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
+                        <JFXTextField fx:id="nbVentes" editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
                            <VBox.margin>
                               <Insets left="5.0" right="10.0" />
                            </VBox.margin>
@@ -390,113 +439,89 @@
                      </VBox>
                   </HBox>
                </AnchorPane>
-               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #428df5; -fx-background-radius: 15; -fx-border-radius: 15;">
-                  <FlowPane.margin>
-                     <Insets bottom="15.0" />
-                  </FlowPane.margin>
+               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
                   <effect>
                      <DropShadow />
                   </effect>
-                  <ImageView fitHeight="192.0" fitWidth="200.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../resources/achats.png" />
-                  </ImageView>
-                  <VBox layoutX="192.0" layoutY="14.0" prefHeight="184.0" prefWidth="202.0">
-                     <Label prefHeight="70.0" prefWidth="207.0" text="Achats">
-                        <font>
-                           <Font name="System Bold" size="48.0" />
-                        </font>
-                     </Label>
-                     <HBox>
-                        <Label prefHeight="42.0" prefWidth="160.0" text="Nombre Des Achats">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="8.0" />
-                           </HBox.margin>
-                        </Label>
-                     </HBox>
-                     <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
-                        <VBox.margin>
-                           <Insets left="8.0" right="10.0" />
-                        </VBox.margin>
-                     </JFXTextField>
-                  </VBox>
+                  <children>
+                     <VBox layoutX="192.0" layoutY="14.0" prefHeight="199.0" prefWidth="202.0" AnchorPane.topAnchor="0.0">
+                        <children>
+                           <HBox />
+                           <Label prefHeight="74.0" prefWidth="222.0" text="Plaquette">
+                              <font>
+                                 <Font name="Times New Roman Bold" size="37.0" />
+                              </font>
+                              <VBox.margin>
+                                 <Insets left="15.0" top="50.0" />
+                              </VBox.margin>
+                           </Label>
+                        </children>
+                     </VBox>
+                     <ImageView fitHeight="193.0" fitWidth="219.0" layoutX="14.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../resources/plaquette.jpg" />
+                        </image>
+                     </ImageView>
+                  </children>
+                  <FlowPane.margin>
+                     <Insets right="10.0" />
+                  </FlowPane.margin>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
                </AnchorPane>
-               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #eb3434; -fx-background-radius: 15; -fx-border-radius: 15;">
+               <AnchorPane prefHeight="165.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
                   <FlowPane.margin>
-                     <Insets right="15.0" />
+                     <Insets right="10.0" />
                   </FlowPane.margin>
                   <effect>
                      <DropShadow />
                   </effect>
-                  <ImageView fitHeight="129.0" fitWidth="231.0" layoutX="-2.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../resources/credit.png" />
+                  <ImageView fitHeight="207.0" fitWidth="193.0" layoutX="7.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@../resources/disque.jpg" />
                   </ImageView>
-                  <VBox layoutX="229.0" layoutY="-1.0" prefHeight="201.0" prefWidth="171.0">
-                     <Label prefHeight="74.0" prefWidth="222.0" text="Credit">
+                  <VBox layoutX="192.0" layoutY="14.0" prefHeight="199.0" prefWidth="202.0" AnchorPane.topAnchor="0.0">
+                     <Label prefHeight="72.0" prefWidth="202.0" text="Disque">
                         <font>
-                           <Font name="System Bold" size="45.0" />
+                           <Font name="Times New Roman Bold" size="37.0" />
                         </font>
+                        <VBox.margin>
+                           <Insets left="15.0" top="50.0" />
+                        </VBox.margin>
                      </Label>
-                     <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Credits">
-                        <font>
-                           <Font size="17.0" />
-                        </font>
-                     </Label>
-                     <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52" />
+                     <HBox />
                   </VBox>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
                </AnchorPane>
                <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
-                  <FlowPane.margin>
-                     <Insets right="15.0" />
-                  </FlowPane.margin>
                   <effect>
                      <DropShadow />
                   </effect>
-                  <ImageView fitHeight="150.0" fitWidth="214.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="25.0">
-                     <Image url="@../resources/clients.png" />
-                  </ImageView>
-                  <VBox layoutX="226.0" prefHeight="200.0" prefWidth="173.0">
-                     <Label prefHeight="74.0" prefWidth="202.0" text="Clients">
-                        <font>
-                           <Font name="System Bold" size="48.0" />
-                        </font>
-                     </Label>
-                     <Label prefHeight="50.0" prefWidth="160.0" text="Nombre Des Clients">
-                        <font>
-                           <Font size="17.0" />
-                        </font>
-                     </Label>
-                     <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52" />
-                  </VBox>
-               </AnchorPane>
-               <AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: grey; -fx-background-radius: 15; -fx-border-radius: 15;">
-                  <ImageView fitHeight="192.0" fitWidth="194.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../resources/fourni.png" />
-                  </ImageView>
-                  <VBox layoutX="184.0" layoutY="8.0" prefHeight="184.0" prefWidth="202.0">
-                     <Label prefHeight="70.0" prefWidth="207.0" text="Fourniseeurs">
-                        <font>
-                           <Font name="System Bold" size="32.0" />
-                        </font>
-                     </Label>
-                     <HBox>
-                        <Label prefHeight="43.0" prefWidth="160.0" text="Nombre Des Fournisseurs">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="8.0" />
-                           </HBox.margin>
-                        </Label>
-                     </HBox>
-                     <JFXTextField editable="false" prefWidth="170.0" promptText="0000000" unFocusColor="#244a52">
-                        <VBox.margin>
-                           <Insets left="8.0" right="10.0" />
-                        </VBox.margin>
-                     </JFXTextField>
-                  </VBox>
+                  <children>
+                     <ImageView fitHeight="193.0" fitWidth="298.0" layoutX="9.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../resources/utils.jpg" />
+                        </image>
+                     </ImageView>
+                     <VBox layoutX="191.0" layoutY="-3.0" prefHeight="199.0" prefWidth="202.0" AnchorPane.topAnchor="-3.0">
+                        <children>
+                           <HBox />
+                           <Label alignment="CENTER" prefHeight="187.0" prefWidth="238.0" rotate="90.0" text="Autres">
+                              <font>
+                                 <Font name="Times New Roman Bold" size="37.0" />
+                              </font>
+                              <VBox.margin>
+                                 <Insets left="90.0" />
+                              </VBox.margin>
+                           </Label>
+                        </children>
+                     </VBox>
+                  </children>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
                </AnchorPane>
             </FlowPane>
          </AnchorPane>
@@ -843,21 +868,71 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
+                  <JFXButton fx:id="imprimer" buttonType="RAISED" layoutX="1018.0" layoutY="377.0" onAction="#imprimer" prefHeight="38.0" prefWidth="134.0" ripplerFill="#5e32c7" style="-fx-background-color: white;" text="Imprimer" textAlignment="CENTER">
+                     <font>
+                        <Font name="Times New Roman" size="21.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="chargeTab" text="Carnet Charges">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="1300.0" style="-fx-border-color: #7400FF; -fx-border-width: 3; -fx-background-color: white;">
+               <children>
+                  <TableView fx:id="tableCharges" layoutX="2.0" layoutY="4.0" prefHeight="373.0" prefWidth="1293.0" stylesheets="@tableView.css">
+                     <columns>
+                        <TableColumn fx:id="colonCharge" editable="false" prefWidth="263.0" text="La charge" />
+                        <TableColumn fx:id="colonDate" editable="false" prefWidth="469.0" text="Date" />
+                        <TableColumn fx:id="coloneSomme" editable="false" prefWidth="343.0" text="Somme" />
+                     </columns>
+                  </TableView>
+                  <Label fx:id="sommeCharge" alignment="CENTER" layoutX="759.0" layoutY="405.0" prefHeight="36.0" prefWidth="327.0">
+                     <font>
+                        <Font name="Times New Roman" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="758.0" layoutY="375.0" prefHeight="17.0" prefWidth="312.0" text="Totale Charges ">
+                     <font>
+                        <Font name="Times New Roman" size="16.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </content>
       </Tab>
    </JFXTabPane>
-   <AnchorPane prefHeight="52.0" prefWidth="538.0" style="-fx-background-color: #7400FF;">
+   <AnchorPane layoutX="-1.0" prefHeight="40.0" prefWidth="675.0" style="-fx-background-color: #7400FF;">
       <children>
          <FontAwesomeIcon fill="WHITE" iconName="USER" layoutX="24.0" layoutY="43.0" size="3em" text="" wrappingWidth="36.71428680419922" />
-         <Label fx:id="userName" layoutX="87.0" layoutY="2.0" prefHeight="50.0" prefWidth="451.0" textFill="WHITE">
+         <Label fx:id="userName" alignment="CENTER" contentDisplay="CENTER" layoutX="87.0" layoutY="2.0" prefHeight="27.0" prefWidth="260.0" text="DRIOUA AMAR" textFill="WHITE">
             <font>
-               <Font name="Times New Roman Italic" size="18.0" />
+               <Font name="Times New Roman Italic" size="17.0" />
             </font>
          </Label>
          <Line endX="3.000030517578125" endY="-24.0" fill="WHITE" layoutX="75.0" layoutY="25.0" startX="3.000030517578125" startY="27.0" stroke="WHITE" strokeWidth="2.0" />
          <Circle fill="#41ff1f" layoutX="62.0" layoutY="12.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" />
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="85.0" layoutY="26.0" prefHeight="27.0" prefWidth="260.0" text="Pièce Auto détachées" textFill="WHITE">
+            <font>
+               <Font name="Times New Roman Italic" size="14.0" />
+            </font>
+         </Label>
+         <Label fx:id="heure" alignment="CENTER" layoutX="348.0" layoutY="-1.0" prefHeight="36.0" prefWidth="132.0" text="11:55" textFill="WHITE">
+            <font>
+               <Font name="Times New Roman" size="23.0" />
+            </font>
+         </Label>
+         <Label fx:id="date" alignment="CENTER" layoutX="539.0" layoutY="18.0" prefHeight="36.0" prefWidth="132.0" text="22/12/2021" textFill="WHITE">
+            <font>
+               <Font name="Times New Roman" size="22.0" />
+            </font>
+         </Label>
+         <Line endX="3.000030517578125" endY="-24.0" fill="WHITE" layoutX="345.0" layoutY="23.0" startX="3.000030517578125" startY="27.0" stroke="WHITE" strokeWidth="2.0" />
+         <Line endX="202.0" endY="-23.999998092651367" fill="WHITE" layoutX="471.0" layoutY="23.0" startX="-121.99993896484375" startY="29.0" stroke="WHITE" strokeWidth="2.0" />
       </children>
    </AnchorPane>
 </AnchorPane>

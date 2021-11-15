@@ -2,15 +2,12 @@ package Application;
 
 import Bdd.BddConnection;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,14 +24,7 @@ import javafx.stage.Stage;
 import noyau.*;
 
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
@@ -63,7 +53,7 @@ public class MagasinController extends Controller implements Initializable {
     ////Données des pieces /////////////////////
     ObservableList<Piece> piecesData;
     FilteredList<Piece> listPieceFiltrer;
-    SortedList<Piece> sortedData ;
+    SortedList<Piece> sortedPiecesList;
     ObservableList<Piece> piecesManquantes;
     ////////////////////////////////////////////
     Piece piece_de_vente=null;
@@ -71,6 +61,10 @@ public class MagasinController extends Controller implements Initializable {
     ObservableList<Vente> ventes;
     JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
     Vente ventAsupprimer = null;
+    /////Données Charges//////////////////////////////////
+    ObservableList<Charge> charges;
+    ///////Thread///////////////////////////
+    Thread clock;
     ////////////Mail////////////////////////////////////////////////////////////
     String to = "driouaammar@gmail.com";
     String from = "driouaimed@gmail.com";
@@ -84,11 +78,7 @@ public class MagasinController extends Controller implements Initializable {
     Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN, 12);
     Rectangle pagesize = new Rectangle(700, 800);
     Document document = new Document(pagesize, 36f, 72f, 80f, 180f);
-
-
-
     Paragraph titre =  new Paragraph("Les Pièces Manquantes",bfBold13);
-
     Paragraph paragraph = new Paragraph("");
     Paragraph gap = new Paragraph("                                                         " +
             "                                                                                              " +
@@ -106,6 +96,9 @@ public class MagasinController extends Controller implements Initializable {
     float[] columnWidths = {1.5f, 2f, 5f, 2f};
     //create PDF table with the given widths
     PdfPTable table = new PdfPTable(columnWidths);
+
+
+
 
     public void setSuggestions(JFXAutoCompletePopup<String> autoCompletePopup){
         this.autoCompletePopup = autoCompletePopup;
@@ -155,6 +148,15 @@ public class MagasinController extends Controller implements Initializable {
     private Label clientsText;
 
     @FXML
+    private Label heure;
+
+    @FXML
+    private Label date;
+
+    @FXML
+    private JFXTextField nbVentes;
+
+    @FXML
     private Tab magasinTab;
 
 
@@ -180,6 +182,9 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private Tab catalogueAdminTab;
+
+    @FXML
+    private Tab chargeTab;
 
     @FXML
     private JFXTabPane tabDeTravaille;
@@ -274,6 +279,13 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private AnchorPane printBtn;
+
+    @FXML
+    private AnchorPane nvChargeBtn;
+
+    @FXML
+    private AnchorPane carnetChargeBtn;
+
 
     @FXML
     private AnchorPane carnetVenteBtn;
@@ -416,16 +428,92 @@ public class MagasinController extends Controller implements Initializable {
 
     @FXML
     private TableColumn<Piece, Integer> stockManqueRow;
+
     @FXML
-    private void envoyerEmail() throws FileNotFoundException, DocumentException {
-        Thread t1 = new Thread(new Upload("driouaimed@gmail.com","pièce.pdf",true,piecesManquantes));
+    private JFXDatePicker dateDcharge;
+
+    @FXML
+    private JFXDatePicker dateFcharge;
+
+
+    @FXML
+    private Label sommeCharge;
+
+    @FXML
+    private TableView<Charge> tableCharges;
+
+    @FXML
+    private TableColumn<Charge, String> colonCharge;
+
+    @FXML
+    private TableColumn<Charge, String> colonDate;
+
+    @FXML
+    private TableColumn<Charge, Double> coloneSomme;
+
+    @FXML
+    private JFXButton filtrerChBtn;
+
+
+    @FXML
+    private void envoyerEmail() throws FileNotFoundException, DocumentException, InterruptedException {
+        Thread t1 = new Thread(new Upload("driouammar@gmail.com","pièce.pdf",true,piecesManquantes,envoyerEmail));
         t1.start();
+    }
+    @FXML
+    private void imprimer(){
+            Thread print = new Thread(new Imprimer());
+            print.start();
     }
 
 
     @FXML
     private JFXCheckBox ecraserStock;
     ////////Traitements des Operations /////////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private void filterCharges() throws ParseException {
+        double totaleCharges = 0;
+        if (!(dateDcharge.getValue() == null && dateFcharge.getValue() == null)) {
+            filtrerChBtn.setText(filtrerChBtn.getText().equals("Filtrer") ? "Annuler" : "Filtrer");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            filtrerChBtn.setStyle(filtrerChBtn.getText().equals("Filtrer") ? "-fx-background-color :  #9ACD32" : "-fx-background-color : #7400FF");
+            if (filtrerChBtn.getText().equals("Annuler")) {
+                Date dateDebut = formatter.parse(dateDcharge.getValue() == null ? "2019-12-30 00:00:00" : dateDcharge.getValue().toString().concat(" 00:00:00"));
+                Date dateFin = formatter.parse(dateFcharge.getValue() == null ? "2025-12-30 00:00:00" : dateFcharge.getValue().toString().concat(" 00:00:00"));
+                if (dateFin.compareTo(dateDebut) >= 0) {
+                    ObservableList<Charge> filtred = FXCollections.observableArrayList();
+                    for (Charge c : this.charges) {
+                        if (c.getDateD().compareTo(dateDebut) >= 0 && c.getDateD().compareTo(dateFin) <= 0) {
+                            filtred.add(c);
+                            totaleCharges = totaleCharges + c.getSomme();
+                        }
+                    }
+                    tableCharges.setItems(filtred);
+                    sommeCharge.setText(totaleCharges + "");
+
+                } else {
+
+                    sommeCharge.setText("");
+                    tableCharges.setItems(this.charges);
+                    dateDcharge.setValue(null);
+                    dateFcharge.setValue(null);
+
+                }
+
+            } else {
+                tableCharges.setItems(this.charges);
+                dateDcharge.setValue(null);
+                dateFcharge.setValue(null);
+                sommeCharge.setText("");
+                if (filtrerChBtn.getText().equals("Annuler")) {
+                    filtrerChBtn.setText("Filtrer");
+                    filtrerChBtn.setStyle("-fx-background-color :  #9ACD32");
+
+                }
+            }
+
+        }
+    }
     @FXML
     void filtrerVente() throws ParseException {
         int totaleQuant = 0;
@@ -481,6 +569,7 @@ public class MagasinController extends Controller implements Initializable {
         }
 
     }
+
     @FXML
     private void validerModification() throws SQLException {
         if(nomMonCpt.textProperty().isEmpty().get() || mtpMonCpt.textProperty().isEmpty().get()){
@@ -720,8 +809,6 @@ public class MagasinController extends Controller implements Initializable {
     @FXML
     private void nouveauUtilisateur(){
       openTab(nouveauUtilisateurTab);
-
-
     }
     @FXML
     private void catalogue(){
@@ -762,6 +849,14 @@ public class MagasinController extends Controller implements Initializable {
         mainVente.setText("");
     }
     @FXML
+    void carnetCharge(){
+    openTab(chargeTab);
+    }
+    @FXML
+    void nvChargeBtn(){
+
+    }
+    @FXML
     void onManqueBtn(MouseEvent event) {
         openTab(pieceManqueTab);
 
@@ -778,6 +873,7 @@ public class MagasinController extends Controller implements Initializable {
         this.closeTab(mesVentesTab);
         this.closeTab(nvVenteTab);
         this.closeTab(pieceManqueTab);
+        this.closeTab(chargeTab);
 
 
         ////////////////////////// Add textfields Listerners ///////////////////////////////////////////////////////////////////
@@ -814,7 +910,9 @@ public class MagasinController extends Controller implements Initializable {
             validerVenteBtn.setDisable(newValue.isEmpty()|| montatnVente.textProperty().isEmpty().get() );
             if(piece_de_vente != null)
             {
-                montatnVente.setText(String.valueOf(Integer.parseInt(quantityVente.getText().trim().isEmpty() ? "0" : quantityVente.getText().trim()) * piece_de_vente.getPrix_de_vente()));
+                System.out.println(piece_de_vente.getPrix_de_vente());
+                System.out.println(quantityVente.getText());
+                montatnVente.setText(String.valueOf(Integer.parseInt(quantityVente.getText().trim().isEmpty() ? "0" : quantityVente.getText().trim()) * (int) piece_de_vente.getPrix_de_vente()));
             }
         });
         recherchePieceRef.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -831,18 +929,16 @@ public class MagasinController extends Controller implements Initializable {
 
             });
         });
+
         rechPieceDes.textProperty().addListener((observable, oldValue, newValue) -> {
             listPieceFiltrer.setPredicate(piece -> {
 
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
-
                 String lowerCaseFilter = newValue.toLowerCase();
 
                 return piece.getDesigniation().toLowerCase().contains(lowerCaseFilter); // Filter matches first name.
-
             });
         });
         rechPiecePrix.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -854,20 +950,20 @@ public class MagasinController extends Controller implements Initializable {
                 double prixRech = Double.parseDouble(newValue);
 
                 return piece.getPrix_de_vente() == prixRech; // Filter matches first name.
-
             });
         });
-
         ///////////////////////// Buttons Events ///////////////////////////////////////////////////////////////////////////////
         this.addHoverStyle(monCompteBtn);
         this.addHoverStyle(ajouteUtilisateurBtn);
-
         this.addHoverStyle(aboutBtn);
         this.addHoverStyle(cataloguePieceBtn);
         this.addHoverStyle(nvPieceBtn);
         this.addHoverStyle(printBtn);
         this.addHoverStyle(carnetVenteBtn);
         this.addHoverStyle(nvVenteBtb);
+        this.addHoverStyle(nvChargeBtn);
+        this.addHoverStyle(carnetChargeBtn);
+
         /////////////////////////Table Admin//////////////////////////////////////////////////////////////////////////////
         idRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,Integer>("id"));
         nomRow.setCellValueFactory(new PropertyValueFactory<Utilisateur,String>("nom"));
@@ -898,10 +994,8 @@ public class MagasinController extends Controller implements Initializable {
                     quantityVente.setText("1");
                     montatnVente.setText(String.valueOf((int)piece.getPrix_de_vente() ));
                     mainVente.setText("0");
-
                 }
                 if (event.getClickCount() == 1 && (! row.isEmpty()) && event.getButton().equals(MouseButton.SECONDARY) && admin.getPrenom().equals("Amar")) {
-
                     Piece piece = row.getItem();
                     openTab(nvPieceTab);
                     ecraserStock.setDisable(false);
@@ -911,7 +1005,6 @@ public class MagasinController extends Controller implements Initializable {
                     paNvPiece.setText(String.valueOf((int)piece.getPrix_de_achat()));
                     pvNvPiece.setText(String.valueOf((int)piece.getPrix_de_vente()));
                     ndNvPiece.setText("0");
-
                 }
             });
             return row ;
@@ -922,7 +1015,6 @@ public class MagasinController extends Controller implements Initializable {
                 supprVente.setDisable(false);
                 // TODO Auto-generated method stub
                ventAsupprimer = row.getItem();
-
             });
             return row;
         });
@@ -941,7 +1033,11 @@ public class MagasinController extends Controller implements Initializable {
         refManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("reference"));
         desManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,String>("designiation"));
         stockManqueRow.setCellValueFactory(new PropertyValueFactory<Piece,Integer>("stock_disponible"));
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////Table des charges/////////////////////////////////////////////////////////////////
+        colonCharge.setCellValueFactory(new PropertyValueFactory<Charge,String>("nomCharge"));
+        colonDate.setCellValueFactory(new PropertyValueFactory<Charge,String>("date"));
+        coloneSomme.setCellValueFactory(new PropertyValueFactory<Charge,Double>("somme"));
+
 
 
 
@@ -960,13 +1056,16 @@ public class MagasinController extends Controller implements Initializable {
         this.updateUsers();
         this.updatePieces();
         this.updateVentes();
+        this.updateCharges();
         this.userName.setText(this.admin.getNom().toUpperCase() + " " + this.admin.getPrenom().toUpperCase());
         envoyerEmail.setText("");
         properties.setProperty("mail.smtp.host",host);
         properties.put("mail.smtp.starttls.enable","true");
         properties.setProperty("mail.smtp.auth","true");
-        Thread t1 = new Thread(new Upload("driouaimed@gmail.com","magasin",false,piecesManquantes));
+        Thread t1 = new Thread(new Upload("driouaimed@gmail.com","magasin",false,piecesManquantes,envoyerEmail));
         t1.start();
+        clock= new Thread(new Clock(heure , date));
+        clock.start();
 
     }
     public void updateUsers(){
@@ -977,9 +1076,9 @@ public class MagasinController extends Controller implements Initializable {
     private void updatePieces(){
         piecesData = FXCollections.observableArrayList(stock.getPieces_disponible().values());
         listPieceFiltrer = new FilteredList<>(piecesData,p->true);
-        sortedData = new SortedList<>(listPieceFiltrer);
-        sortedData.comparatorProperty().bind(tablePiece.comparatorProperty());
-        tablePiece.setItems(sortedData);
+        sortedPiecesList = new SortedList<>(listPieceFiltrer);
+        sortedPiecesList.comparatorProperty().bind(tablePiece.comparatorProperty());
+        tablePiece.setItems(sortedPiecesList);
         this.updatePieceManque();
         tablePiece.refresh();
         this.upDateAcceuil();
@@ -988,6 +1087,10 @@ public class MagasinController extends Controller implements Initializable {
          ventes = FXCollections.observableArrayList(magasin.getCarnet_des_ventes());
          tableVente.setItems(ventes);
          this.upDateAcceuil();
+    }
+    private void updateCharges(){
+        this.charges = FXCollections.observableArrayList(magasin.getCharges());
+        tableCharges.setItems(this.charges);
     }
     public void setAdmin(Utilisateur admin) {
         this.admin = admin;
@@ -998,7 +1101,6 @@ public class MagasinController extends Controller implements Initializable {
                 this.pr = this.connection.prepareStatement(sql);
                 Thread copy = new Thread(new Copy());
                 copy.start();
-
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -1062,6 +1164,7 @@ public class MagasinController extends Controller implements Initializable {
         factureTot.setText(String.valueOf(stock.getFactur()));
         benificeTot.setText(String.valueOf(stock.getBenifice()));
         venteTot.setText(String.valueOf(stock.getVentes()));
+        nbVentes.setText(String.valueOf(magasin.getCarnet_des_ventes().size()));
     }
     @FXML
     private void deconnecter() throws IOException {
@@ -1076,6 +1179,11 @@ public class MagasinController extends Controller implements Initializable {
         stage.show();
        Stage main=(Stage) deconnect.getScene().getWindow();
        main.close();
+
+
+    }
+    public  void closeThreads(){
+        this.clock.stop();
 
     }
    /*private void arab(){

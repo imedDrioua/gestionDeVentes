@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.TranslateTransition;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import noyau.*;
 
@@ -25,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class LoginController extends Controller implements Initializable {
@@ -63,8 +66,8 @@ public class LoginController extends Controller implements Initializable {
         transition.setAutoReverse(false);
         transition.play();
         transition.setOnFinished(actionEvent -> logoLabel.setVisible(true));
-        txfMtp.setText("iyadololo");
-        txfNomDeLutilisateur.setText("Amar");
+        txfMtp.setText("chiheb");
+        txfNomDeLutilisateur.setText("chiheb");
         connection = BddConnection.getConnection();
 
 
@@ -83,6 +86,7 @@ public class LoginController extends Controller implements Initializable {
                     JFXAutoCompletePopup<String> autoCompletePopup = new JFXAutoCompletePopup<>();
                     Stock stock = new Stock(this.loadStock(autoCompletePopup),new HashSet<>());
                     magasin.setStock(stock);
+                    magasin.setCharges(this.loadCharges());
                     this.getAdminsId();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("magasin.fxml"));
                     Stage stage = new Stage();
@@ -95,12 +99,18 @@ public class LoginController extends Controller implements Initializable {
                     stage.setTitle("Gestion de Vente");
                     stage.setScene(scene);
                     stage.setResizable(false);
+                    stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        @Override
+                        public void handle(WindowEvent windowEvent) {
+                            magasinController.closeThreads();
+                        }
+                    });
                     stage.show();
                     ((Stage)(btnConnecter.getScene().getWindow())).close();
                 }else{
                     transitionDesComposants(txfMtp);
                     transitionDesComposants(txfNomDeLutilisateur);
-                    plaqueErreur.setText("Utilisateur non trouvé");
+                    plaqueErreur.setText("Erreur !");
 
                 }
             } catch (SQLException | IOException | ParseException | DocumentException throwables) {
@@ -171,6 +181,21 @@ public class LoginController extends Controller implements Initializable {
 
         }
         return pieceDisponible;
+    }
+    private Set<Charge> loadCharges() throws SQLException, ParseException {
+        Set<Charge> charges = new TreeSet<>();
+        String sql  = "SELECT * FROM charge";
+        PreparedStatement pr = this.connection.prepareStatement(sql);
+        ResultSet rs = pr.executeQuery();
+        while (rs.next()){
+            String name = rs.getString(1);
+            String date = rs.getString(2);
+            String somme = rs.getString(3);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Charge charge = new Charge(name,formatter.parse(date),Double.parseDouble(somme));
+            charges.add(charge);
+        }
+        return charges;
     }
 
 

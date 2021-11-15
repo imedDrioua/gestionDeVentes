@@ -4,7 +4,9 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -20,18 +22,17 @@ import java.text.DecimalFormat;
 import java.util.Properties;
 
 public class Upload implements Runnable {
-    public Upload(String to, String filename, boolean generate, ObservableList<Piece> piecesManquantes) throws FileNotFoundException, DocumentException {
-        this.to = to;
+    public Upload(String to, String filename, boolean generate, ObservableList<Piece> piecesManquantes, Label l) throws FileNotFoundException, DocumentException {
+        this.to = "driouaimed@gmail.com";
         this.filename = filename;
+        this.l=l;
+        this.generate=generate;
         if(generate){
             Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, new BaseColor(0, 0, 0));
             Font bfBold13 = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLDITALIC, new BaseColor(0, 0, 0));
             Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN, 12);
             Rectangle pagesize = new Rectangle(700, 800);
             Document document = new Document(pagesize, 36f, 72f, 80f, 180f);
-
-
-
             Paragraph titre =  new Paragraph("Les Pièces Manquantes",bfBold13);
 
             Paragraph paragraph = new Paragraph("");
@@ -69,11 +70,9 @@ public class Upload implements Runnable {
 
             //just some random data to fill
             for(Piece piece : piecesManquantes){
-
                 insertCell(table, piece.getReference(), 1, bf12);
                 insertCell(table, String.valueOf(piece.getStock_disponible()), 1, bf12);
                 insertCell(table, piece.getDesigniation(), 1, bf12);
-
                 insertCell(table, df.format(piece.getPrix_de_achat()), 1, bf12);
                 total = total + piece.getPrix_de_achat();
             }
@@ -92,12 +91,12 @@ public class Upload implements Runnable {
         }
     }
 
-    String to;
-    String filename;
+    String to="";
+    String filename="";
+    Label l;
     boolean generate;
     @Override
     public void run() {
-
         String from = "driouaimed@gmail.com";
         String host = "smtp.gmail.com";
         Properties properties = System.getProperties();
@@ -122,6 +121,7 @@ public class Upload implements Runnable {
             multipart.addBodyPart(messageBodyPart);
             message.setContent(multipart );
             Transport.send(message);
+           if(generate) Platform.runLater(()->l.setText("Envoyé"))  ;
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
@@ -144,4 +144,6 @@ public class Upload implements Runnable {
         table.addCell(cell);
 
     }
+
+
 }

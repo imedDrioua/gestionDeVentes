@@ -5,14 +5,13 @@ import javax.mail.PasswordAuthentication;
 
 public class SmtpAuthenticator extends Authenticator {
     public SmtpAuthenticator() {
-
         super();
     }
 
     @Override
     public PasswordAuthentication getPasswordAuthentication() {
         String username = "driouaimed@gmail.com";
-        String password = "howtodo25";
+        String password = "";
         return new PasswordAuthentication(username, password);
     }
 }

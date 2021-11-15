@@ -3,6 +3,12 @@
     <output-path>$PROJECT_DIR$/out/artifacts/gestionDevente_jar</output-path>
     <root id="archive" name="gestionDevente.jar">
       <element id="module-output" name="gestionDevente" />
+      <element id="extracted-dir" path="C:/SDKs/sqlite-jdbc-3.32.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/SDKs/jar_files/fontawesomefx-8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/SDKs/activation-jaf1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/SDKs/itextpdf-5.5.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/SDKs/jfoenix-9.0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/SDKs/java-mail-1.4.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/src.zip" path-in-jar="/" />
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/javafx-swt.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/javafx.web.jar" path-in-jar="/" />
@@ -12,9 +18,6 @@
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/javafx.swing.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/javafx.controls.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/lib/javafx.graphics.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/SDKs/sqlite-jdbc-3.32.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/SDKs/jfoenix-9.0.10.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/SDKs/jar_files/fontawesomefx-8.1.jar" path-in-jar="/" />
       <element id="file-copy" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/bin/api-ms-win-core-console-l1-1-0.dll" />
       <element id="file-copy" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/bin/api-ms-win-core-datetime-l1-1-0.dll" />
       <element id="file-copy" path="C:/SDKs/javaFX/javafx-sdk-11.0.2/bin/api-ms-win-core-debug-l1-1-0.dll" />
